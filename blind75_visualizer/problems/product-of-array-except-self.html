@@ -33,7 +33,14 @@
     <div class="panel" data-viz-root>
   <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
   <div class="panel-body viz-stage">
-    <div class="viz-example">nums = [1, 2, 3, 4]  →  [24, 12, 8, 6]</div>
+    <div class="input-form">
+      <div class="input-field">
+      <label for="field-nums">nums</label>
+      <input type="text" id="field-nums" value="1, 2, 3, 4" />
+    </div>
+      <button class="run-btn" data-viz-run>Visualize</button>
+    </div>
+    <div class="input-error" data-viz-error hidden></div>
     <div data-viz-rows></div>
     <div data-viz-map-block>
       <div class="row-label" data-viz-map-label></div>
@@ -54,8 +61,82 @@
     </div>
   </div>
 </div>
-<script>window.STEPS = [{"line": 6, "narration": "Initialize result with all 1s.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 4, "state": "pending"}]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": null}, {"line": 10, "narration": "result[0] = prefix (1); then prefix *= nums[0] \u2192 1.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "current"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 4, "state": "pending"}]}, {"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": null}, {"line": 10, "narration": "result[1] = prefix (1); prefix *= nums[1] \u2192 2.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "current"}, {"v": 3, "state": "pending"}, {"v": 4, "state": "pending"}]}, {"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": null}, {"line": 10, "narration": "result[2] = prefix (2); prefix *= nums[2] \u2192 6.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "current"}, {"v": 4, "state": "pending"}]}, {"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 1, "state": "pending"}]}], "map": null}, {"line": 10, "narration": "result[3] = prefix (6); prefix *= nums[3] \u2192 24. Left pass done: result = [1, 1, 2, 6].", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 4, "state": "current"}]}, {"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 6, "state": "done"}]}], "map": null}, {"line": 15, "narration": "Now sweep from the right, tracking the running product of everything to the right (postfix, starts at 1).", "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 4, "state": "pending"}]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 6, "state": "pending"}]}], "map": null}, {"line": 15, "narration": "result[3] = 6 \u00d7 postfix(1) = 6; postfix *= nums[3] \u2192 4.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 4, "state": "current"}]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 6, "state": "done"}]}], "map": null}, {"line": 15, "narration": "result[2] = 2 \u00d7 postfix(4) = 8; postfix *= nums[2] \u2192 12.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "current"}, {"v": 4, "state": "done"}]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 8, "state": "done"}, {"v": 6, "state": "done"}]}], "map": null}, {"line": 15, "narration": "result[1] = 1 \u00d7 postfix(12) = 12; postfix *= nums[1] \u2192 24.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "current"}, {"v": 3, "state": "done"}, {"v": 4, "state": "done"}]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 12, "state": "done"}, {"v": 8, "state": "done"}, {"v": 6, "state": "done"}]}], "map": null}, {"line": 18, "narration": "<b>result[0] = 1 \u00d7 postfix(24) = 24.</b> Final: [24, 12, 8, 6] \u2014 no division used.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "hit"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 4, "state": "done"}]}, {"label": "result", "items": [{"v": 24, "state": "hit"}, {"v": 12, "state": "hit"}, {"v": 8, "state": "hit"}, {"v": 6, "state": "hit"}]}], "map": null}];</script>
+<script>
+window.INPUT_SCHEMA = [{"name": "nums", "label": "nums", "type": "int-array", "default": "1, 2, 3, 4", "maxLen": 20}];
+function generateSteps(nums) {
+  var steps = [];
+  var n = nums.length;
+  var result = new Array(n).fill(1);
+
+  steps.push({
+    line: 6,
+    narration: "Initialize result with all 1s.",
+    rows: [
+      { label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) },
+      { label: "result", items: result.map(function (v) { return { v: v, state: "pending" }; }) }
+    ],
+    map: null
+  });
+
+  var prefix = 1;
+  for (var i = 0; i < n; i++) {
+    var before = prefix;
+    result[i] = prefix;
+    var nextPrefix = prefix * nums[i];
+    steps.push({
+      line: 10,
+      narration: "result[" + i + "] = prefix (" + before + "); prefix *= nums[" + i + "] → " + nextPrefix + ".",
+      rows: [
+        { label: "nums", items: nums.map(function (v, idx) { return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" }; }) },
+        { label: "result", items: result.map(function (v, idx) { return { v: v, state: idx <= i ? "done" : "pending" }; }) }
+      ],
+      map: null
+    });
+    prefix = nextPrefix;
+  }
+
+  steps.push({
+    line: 13,
+    narration: "Now sweep from the right, tracking postfix (starts at 1).",
+    rows: [
+      { label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) },
+      { label: "result", items: result.map(function (v) { return { v: v, state: "pending" }; }) }
+    ],
+    map: null
+  });
+
+  var postfix = 1;
+  for (var j = n - 1; j >= 0; j--) {
+    var beforeVal = result[j];
+    var beforePostfix = postfix;
+    result[j] = result[j] * postfix;
+    var nextPostfix = postfix * nums[j];
+    steps.push({
+      line: 15,
+      narration: "result[" + j + "] = " + beforeVal + " × postfix(" + beforePostfix + ") = " + result[j] + "; postfix *= nums[" + j + "] → " + nextPostfix + ".",
+      rows: [
+        { label: "nums", items: nums.map(function (v, idx) { return { v: v, state: idx > j ? "done" : idx === j ? "current" : "pending" }; }) },
+        { label: "result", items: result.map(function (v, idx) { return { v: v, state: idx >= j ? "done" : "pending" }; }) }
+      ],
+      map: null
+    });
+    postfix = nextPostfix;
+  }
+
+  steps.push({
+    line: 18,
+    narration: "<b>Return [" + result.join(", ") + "]</b> — no division used.",
+    rows: [
+      { label: "nums", items: nums.map(function (v) { return { v: v, state: "hit" }; }) },
+      { label: "result", items: result.map(function (v) { return { v: v, state: "hit" }; }) }
+    ],
+    map: null
+  });
+  return steps;
+}
+</script>
 <script src="../shared/viz.js"></script>
+<script>window.initVizForm();</script>
 
   </div>
 </div>

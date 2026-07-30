@@ -33,7 +33,14 @@
     <div class="panel" data-viz-root>
   <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
   <div class="panel-body viz-stage">
-    <div class="viz-example">nums = [100, 4, 200, 1, 3, 2]  →  4  (the run 1, 2, 3, 4)</div>
+    <div class="input-form">
+      <div class="input-field">
+      <label for="field-nums">nums</label>
+      <input type="text" id="field-nums" value="100, 4, 200, 1, 3, 2" />
+    </div>
+      <button class="run-btn" data-viz-run>Visualize</button>
+    </div>
+    <div class="input-error" data-viz-error hidden></div>
     <div data-viz-rows></div>
     <div data-viz-map-block>
       <div class="row-label" data-viz-map-label></div>
@@ -54,8 +61,82 @@
     </div>
   </div>
 </div>
-<script>window.STEPS = [{"line": 4, "narration": "Put every number in a set for O(1) lookups.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "pending"}, {"v": 4, "state": "pending"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100, "added": true}, {"v": 4, "added": true}, {"v": 200, "added": true}, {"v": 1, "added": true}, {"v": 3, "added": true}, {"v": 2, "added": true}]}}, {"line": 8, "narration": "100: is 99 in the set? No \u2014 100 could start a streak.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "current"}, {"v": 4, "state": "pending"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 10, "narration": "Count forward from 100: 101 is not in the set, so this streak has length 1. Best so far: 1.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "pending"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 8, "narration": "4: is 3 in the set? Yes \u2014 so 4 is NOT a streak start; skip it.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "current"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 8, "narration": "200: is 199 in the set? No \u2014 200 could start a streak. Counting forward finds length 1 (best stays 1).", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "done"}, {"v": 200, "state": "current"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 8, "narration": "1: is 0 in the set? No \u2014 1 could start a streak.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "done"}, {"v": 200, "state": "done"}, {"v": 1, "state": "current"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 10, "narration": "Count forward from 1: 2, 3, 4 are all in the set, 5 is not \u2192 streak length 4.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "hit"}, {"v": 200, "state": "done"}, {"v": 1, "state": "hit"}, {"v": 3, "state": "hit"}, {"v": 2, "state": "hit"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 11, "narration": "New best streak: 4 (1 \u2192 2 \u2192 3 \u2192 4). The remaining numbers (3, 2) fail the 'num - 1 not in set' check and are skipped.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "hit"}, {"v": 200, "state": "done"}, {"v": 1, "state": "hit"}, {"v": 3, "state": "hit"}, {"v": 2, "state": "hit"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 13, "narration": "<b>Return 4</b> \u2014 the longest run is 1 \u2192 2 \u2192 3 \u2192 4.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "hit"}, {"v": 200, "state": "done"}, {"v": 1, "state": "hit"}, {"v": 3, "state": "hit"}, {"v": 2, "state": "hit"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}];</script>
+<script>
+window.INPUT_SCHEMA = [{"name": "nums", "label": "nums", "type": "int-array", "default": "100, 4, 200, 1, 3, 2", "maxLen": 30}];
+function generateSteps(nums) {
+  var steps = [];
+  var uniq = [];
+  var seenVal = {};
+  nums.forEach(function (v) {
+    if (!Object.prototype.hasOwnProperty.call(seenVal, v)) { seenVal[v] = true; uniq.push(v); }
+  });
+  var numSet = {};
+  uniq.forEach(function (v) { numSet[v] = true; });
+
+  var state = {};
+  nums.forEach(function (v) { state[v] = "pending"; });
+
+  function rowsSnapshot() {
+    return nums.map(function (v) { return { v: v, state: state[v] }; });
+  }
+  function setItems() {
+    return uniq.map(function (v) { return { v: v }; });
+  }
+
+  steps.push({
+    line: 4,
+    narration: "Put every number in a set for O(1) lookups.",
+    rows: [{ label: "nums", items: rowsSnapshot() }],
+    map: { label: "num_set", items: uniq.map(function (v) { return { v: v, added: true }; }) }
+  });
+
+  var longest = 0;
+  for (var i = 0; i < uniq.length; i++) {
+    var num = uniq[i];
+    state[num] = "current";
+    var hasLower = Object.prototype.hasOwnProperty.call(numSet, num - 1);
+    steps.push({
+      line: 8,
+      narration: num + ": is " + (num - 1) + " in the set? " + (hasLower ? "Yes — not a streak start; skip." : "No — could start a streak."),
+      rows: [{ label: "nums", items: rowsSnapshot() }],
+      map: { label: "num_set", items: setItems() }
+    });
+
+    if (hasLower) {
+      state[num] = "done";
+      continue;
+    }
+
+    var length = 1;
+    while (Object.prototype.hasOwnProperty.call(numSet, num + length)) length += 1;
+
+    var isNewBest = length > longest;
+    if (isNewBest) {
+      longest = length;
+      for (var k = 0; k < length; k++) state[num + k] = "hit";
+    } else {
+      state[num] = "done";
+    }
+
+    steps.push({
+      line: 10,
+      narration: "Count forward from " + num + ": streak length " + length + ". " + (isNewBest ? ("New best: " + length + ".") : ""),
+      rows: [{ label: "nums", items: rowsSnapshot() }],
+      map: { label: "num_set", items: setItems() }
+    });
+  }
+
+  steps.push({
+    line: 13,
+    narration: "<b>Return " + longest + "</b> — the longest run has length " + longest + ".",
+    rows: [{ label: "nums", items: rowsSnapshot() }],
+    map: { label: "num_set", items: setItems() }
+  });
+  return steps;
+}
+</script>
 <script src="../shared/viz.js"></script>
+<script>window.initVizForm();</script>
 
   </div>
 </div>

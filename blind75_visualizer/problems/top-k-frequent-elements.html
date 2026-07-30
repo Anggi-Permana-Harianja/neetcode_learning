@@ -33,7 +33,17 @@
     <div class="panel" data-viz-root>
   <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
   <div class="panel-body viz-stage">
-    <div class="viz-example">nums = [1,1,1,2,2,3], k = 2  →  [1, 2]</div>
+    <div class="input-form">
+      <div class="input-field">
+      <label for="field-nums">nums</label>
+      <input type="text" id="field-nums" value="1, 1, 1, 2, 2, 3" />
+    </div><div class="input-field">
+      <label for="field-k">k</label>
+      <input type="text" id="field-k" value="2" />
+    </div>
+      <button class="run-btn" data-viz-run>Visualize</button>
+    </div>
+    <div class="input-error" data-viz-error hidden></div>
     <div data-viz-rows></div>
     <div data-viz-map-block>
       <div class="row-label" data-viz-map-label></div>
@@ -54,8 +64,84 @@
     </div>
   </div>
 </div>
-<script>window.STEPS = [{"line": 6, "narration": "Count frequency of each number: 1\u21923, 2\u21922, 3\u21921.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}]}], "map": {"label": "count", "items": [{"v": "1:3", "added": true}, {"v": "2:2", "added": true}, {"v": "3:1", "added": true}]}}, {"line": 9, "narration": "Bucket numbers by frequency (bucket index = frequency): bucket[3]=[1], bucket[2]=[2], bucket[1]=[3].", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]", "added": true}, {"v": "2 \u2192 [2]", "added": true}, {"v": "1 \u2192 [3]", "added": true}]}}, {"line": 13, "narration": "Walk buckets from highest frequency down. freq=3: take 1.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "current"}, {"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}, {"line": 14, "narration": "Add 1 to result \u2192 [1]. Not yet k=2 items.", "rows": [{"label": "result", "items": [{"v": 1, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}, {"line": 13, "narration": "freq=2: take 2.", "rows": [{"label": "result", "items": [{"v": 1, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}, {"line": 14, "narration": "Add 2 to result \u2192 [1, 2].", "rows": [{"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}, {"line": 16, "narration": "<b>len(result) == k \u2014 return [1, 2].</b> Reached the 2 most frequent elements.", "rows": [{"label": "result", "items": [{"v": 1, "state": "hit"}, {"v": 2, "state": "hit"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}];</script>
+<script>
+window.INPUT_SCHEMA = [{"name": "nums", "label": "nums", "type": "int-array", "default": "1, 1, 1, 2, 2, 3", "maxLen": 30}, {"name": "k", "label": "k", "type": "int", "default": "2"}];
+function generateSteps(nums, k) {
+  var steps = [];
+  var counts = {};
+  var countOrder = [];
+  nums.forEach(function (n) {
+    if (!Object.prototype.hasOwnProperty.call(counts, n)) { counts[n] = 0; countOrder.push(n); }
+    counts[n] += 1;
+  });
+
+  steps.push({
+    line: 6,
+    narration: "Count frequency of each number: " + countOrder.map(function (n) { return n + "→" + counts[n]; }).join(", ") + ".",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) }],
+    map: { label: "count", items: countOrder.map(function (n) { return { v: n + ":" + counts[n], added: true }; }) }
+  });
+
+  var maxFreq = nums.length;
+  var buckets = [];
+  for (var f = 0; f <= maxFreq; f++) buckets.push([]);
+  countOrder.forEach(function (n) { buckets[counts[n]].push(n); });
+
+  function bucketItems() {
+    var arr = [];
+    for (var f2 = buckets.length - 1; f2 >= 1; f2--) {
+      if (buckets[f2].length) arr.push({ v: f2 + " → [" + buckets[f2].join(", ") + "]" });
+    }
+    return arr;
+  }
+
+  steps.push({
+    line: 9,
+    narration: "Bucket numbers by frequency (bucket index = frequency).",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "done" }; }) }],
+    map: { label: "buckets (freq → nums)", items: bucketItems() }
+  });
+
+  var result = [];
+  for (var freq = buckets.length - 1; freq >= 1; freq--) {
+    for (var b = 0; b < buckets[freq].length; b++) {
+      var num = buckets[freq][b];
+      steps.push({
+        line: 13,
+        narration: "freq=" + freq + ": take " + num + ".",
+        rows: [{ label: "result", items: result.map(function (v) { return { v: v, state: "done" }; }) }],
+        map: { label: "buckets (freq → nums)", items: bucketItems() }
+      });
+      result.push(num);
+      steps.push({
+        line: 14,
+        narration: "Add " + num + " to result → [" + result.join(", ") + "].",
+        rows: [{ label: "result", items: result.map(function (v) { return { v: v, state: "done" }; }) }],
+        map: { label: "buckets (freq → nums)", items: bucketItems() }
+      });
+      if (result.length === k) {
+        steps.push({
+          line: 16,
+          narration: "<b>len(result) == k — return [" + result.join(", ") + "].</b>",
+          rows: [{ label: "result", items: result.map(function (v) { return { v: v, state: "hit" }; }) }],
+          map: { label: "buckets (freq → nums)", items: bucketItems() }
+        });
+        return steps;
+      }
+    }
+  }
+
+  steps.push({
+    line: 17,
+    narration: "<b>Return [" + result.join(", ") + "].</b>",
+    rows: [{ label: "result", items: result.map(function (v) { return { v: v, state: "hit" }; }) }],
+    map: { label: "buckets (freq → nums)", items: bucketItems() }
+  });
+  return steps;
+}
+</script>
 <script src="../shared/viz.js"></script>
+<script>window.initVizForm();</script>
 
   </div>
 </div>

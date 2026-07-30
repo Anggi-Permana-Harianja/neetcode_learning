@@ -33,7 +33,14 @@
     <div class="panel" data-viz-root>
   <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
   <div class="panel-body viz-stage">
-    <div class="viz-example">nums = [1, 2, 3, 1]  →  True</div>
+    <div class="input-form">
+      <div class="input-field">
+      <label for="field-nums">nums</label>
+      <input type="text" id="field-nums" value="1, 2, 3, 1" />
+    </div>
+      <button class="run-btn" data-viz-run>Visualize</button>
+    </div>
+    <div class="input-error" data-viz-error hidden></div>
     <div data-viz-rows></div>
     <div data-viz-map-block>
       <div class="row-label" data-viz-map-label></div>
@@ -54,8 +61,69 @@
     </div>
   </div>
 </div>
-<script>window.STEPS = [{"line": 5, "narration": "Start with an empty set to track numbers we've seen.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": []}}, {"line": 7, "narration": "Check if <b>1</b> is in <code>seen</code> \u2014 the set is empty, so no.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "current"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": []}}, {"line": 9, "narration": "Not found \u2014 add <b>1</b> to <code>seen</code>.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": true}]}}, {"line": 7, "narration": "Check if <b>2</b> is in <code>seen</code> \u2014 not yet.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "current"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}]}}, {"line": 9, "narration": "Not found \u2014 add <b>2</b> to <code>seen</code>.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": true}]}}, {"line": 7, "narration": "Check if <b>3</b> is in <code>seen</code> \u2014 not yet.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "current"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": false}]}}, {"line": 9, "narration": "Not found \u2014 add <b>3</b> to <code>seen</code>.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": false}, {"v": 3, "added": true}]}}, {"line": 7, "narration": "Check if <b>1</b> is in <code>seen</code> \u2014 yes, added back at index 0!", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 1, "state": "current"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": false}, {"v": 3, "added": false}]}}, {"line": 8, "narration": "<b>Duplicate found \u2014 return True.</b>", "rows": [{"label": "nums", "items": [{"v": 1, "state": "hit"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 1, "state": "hit"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": false}, {"v": 3, "added": false}]}}];</script>
+<script>
+window.INPUT_SCHEMA = [{"name": "nums", "label": "nums", "type": "int-array", "default": "1, 2, 3, 1", "maxLen": 30}];
+function generateSteps(nums) {
+  var steps = [];
+  var seen = [];
+  var seenSet = {};
+
+  steps.push({
+    line: 5,
+    narration: "Start with an empty set to track numbers we've seen.",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) }],
+    map: { label: "seen (set)", items: [] }
+  });
+
+  for (var i = 0; i < nums.length; i++) {
+    var num = nums[i];
+    var found = Object.prototype.hasOwnProperty.call(seenSet, num);
+
+    steps.push({
+      line: 7,
+      narration: "Check if <b>" + num + "</b> is in <code>seen</code> — " + (found ? "yes!" : "no."),
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" };
+      }) }],
+      map: { label: "seen (set)", items: seen.map(function (v) { return { v: v }; }) }
+    });
+
+    if (found) {
+      var firstIdx = nums.indexOf(num);
+      steps.push({
+        line: 8,
+        narration: "<b>Duplicate found — return True.</b>",
+        rows: [{ label: "nums", items: nums.map(function (v, idx) {
+          return { v: v, state: (idx === i || idx === firstIdx) ? "hit" : (idx < i ? "done" : "pending") };
+        }) }],
+        map: { label: "seen (set)", items: seen.map(function (v) { return { v: v }; }) }
+      });
+      return steps;
+    }
+
+    seenSet[num] = true;
+    seen.push(num);
+    steps.push({
+      line: 9,
+      narration: "Not found — add <b>" + num + "</b> to <code>seen</code>.",
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx <= i ? "done" : "pending" };
+      }) }],
+      map: { label: "seen (set)", items: seen.map(function (v, idx) { return { v: v, added: idx === seen.length - 1 }; }) }
+    });
+  }
+
+  steps.push({
+    line: 10,
+    narration: "<b>No duplicates found — return False.</b>",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "done" }; }) }],
+    map: { label: "seen (set)", items: seen.map(function (v) { return { v: v }; }) }
+  });
+  return steps;
+}
+</script>
 <script src="../shared/viz.js"></script>
+<script>window.initVizForm();</script>
 
   </div>
 </div>

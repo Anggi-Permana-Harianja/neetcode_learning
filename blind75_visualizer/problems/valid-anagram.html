@@ -33,7 +33,17 @@
     <div class="panel" data-viz-root>
   <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
   <div class="panel-body viz-stage">
-    <div class="viz-example">s = &quot;anagram&quot;, t = &quot;nagaram&quot;  →  True</div>
+    <div class="input-form">
+      <div class="input-field">
+      <label for="field-s">s</label>
+      <input type="text" id="field-s" value="anagram" />
+    </div><div class="input-field">
+      <label for="field-t">t</label>
+      <input type="text" id="field-t" value="nagaram" />
+    </div>
+      <button class="run-btn" data-viz-run>Visualize</button>
+    </div>
+    <div class="input-error" data-viz-error hidden></div>
     <div data-viz-rows></div>
     <div data-viz-map-block>
       <div class="row-label" data-viz-map-label></div>
@@ -54,8 +64,102 @@
     </div>
   </div>
 </div>
-<script>window.STEPS = [{"line": 3, "narration": "Lengths match (7 = 7) \u2014 an anagram is still possible.", "rows": [{"label": "s", "items": [{"v": "a", "state": "pending"}, {"v": "n", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "g", "state": "pending"}, {"v": "r", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "m", "state": "pending"}]}, {"label": "t", "items": [{"v": "n", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "g", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "r", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "m", "state": "pending"}]}], "map": {"label": "char counts", "items": []}}, {"line": 7, "narration": "Count each character in <b>s</b>: a\u21923, n\u21921, g\u21921, r\u21921, m\u21921.", "rows": [{"label": "s", "items": [{"v": "a", "state": "done"}, {"v": "n", "state": "done"}, {"v": "a", "state": "done"}, {"v": "g", "state": "done"}, {"v": "r", "state": "done"}, {"v": "a", "state": "done"}, {"v": "m", "state": "done"}]}, {"label": "t", "items": [{"v": "n", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "g", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "r", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "m", "state": "pending"}]}], "map": {"label": "char counts", "items": [{"v": "a:3", "added": true}, {"v": "n:1", "added": true}, {"v": "g:1", "added": true}, {"v": "r:1", "added": true}, {"v": "m:1", "added": true}]}}, {"line": 9, "narration": "t[0]='n' is present with count 1 \u2014 ok so far.", "rows": [{"label": "s", "items": [{"v": "a", "state": "done"}, {"v": "n", "state": "done"}, {"v": "a", "state": "done"}, {"v": "g", "state": "done"}, {"v": "r", "state": "done"}, {"v": "a", "state": "done"}, {"v": "m", "state": "done"}]}, {"label": "t", "items": [{"v": "n", "state": "current"}, {"v": "a", "state": "pending"}, {"v": "g", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "r", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "m", "state": "pending"}]}], "map": {"label": "char counts", "items": [{"v": "a:3"}, {"v": "n:1"}, {"v": "g:1"}, {"v": "r:1"}, {"v": "m:1"}]}}, {"line": 11, "narration": "Decrement n \u2192 0.", "rows": [{"label": "s", "items": [{"v": "a", "state": "done"}, {"v": "n", "state": "done"}, {"v": "a", "state": "done"}, {"v": "g", "state": "done"}, {"v": "r", "state": "done"}, {"v": "a", "state": "done"}, {"v": "m", "state": "done"}]}, {"label": "t", "items": [{"v": "n", "state": "done"}, {"v": "a", "state": "pending"}, {"v": "g", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "r", "state": "pending"}, {"v": "a", "state": "pending"}, {"v": "m", "state": "pending"}]}], "map": {"label": "char counts", "items": [{"v": "a:3"}, {"v": "n:0"}, {"v": "g:1"}, {"v": "r:1"}, {"v": "m:1"}]}}, {"line": 9, "narration": "Continue matching the rest of t the same way \u2014 a, g, a, r, a, m each found with count > 0, decrementing as we go.", "rows": [{"label": "s", "items": [{"v": "a", "state": "done"}, {"v": "n", "state": "done"}, {"v": "a", "state": "done"}, {"v": "g", "state": "done"}, {"v": "r", "state": "done"}, {"v": "a", "state": "done"}, {"v": "m", "state": "done"}]}, {"label": "t", "items": [{"v": "n", "state": "done"}, {"v": "a", "state": "done"}, {"v": "g", "state": "done"}, {"v": "a", "state": "done"}, {"v": "r", "state": "done"}, {"v": "a", "state": "done"}, {"v": "m", "state": "done"}]}], "map": {"label": "char counts", "items": [{"v": "a:0"}, {"v": "n:0"}, {"v": "g:0"}, {"v": "r:0"}, {"v": "m:0"}]}}, {"line": 12, "narration": "<b>Every count reached zero \u2014 return True.</b> t is an anagram of s.", "rows": [{"label": "s", "items": [{"v": "a", "state": "done"}, {"v": "n", "state": "done"}, {"v": "a", "state": "done"}, {"v": "g", "state": "done"}, {"v": "r", "state": "done"}, {"v": "a", "state": "done"}, {"v": "m", "state": "done"}]}, {"label": "t", "items": [{"v": "n", "state": "hit"}, {"v": "a", "state": "hit"}, {"v": "g", "state": "hit"}, {"v": "a", "state": "hit"}, {"v": "r", "state": "hit"}, {"v": "a", "state": "hit"}, {"v": "m", "state": "hit"}]}], "map": {"label": "char counts", "items": [{"v": "a:0"}, {"v": "n:0"}, {"v": "g:0"}, {"v": "r:0"}, {"v": "m:0"}]}}];</script>
+<script>
+window.INPUT_SCHEMA = [{"name": "s", "label": "s", "type": "string", "default": "anagram", "maxLen": 24}, {"name": "t", "label": "t", "type": "string", "default": "nagaram", "maxLen": 24}];
+function generateSteps(s, t) {
+  var steps = [];
+  var sArr = s.split("");
+  var tArr = t.split("");
+
+  function sItems(doneUpTo) {
+    return sArr.map(function (c, idx) { return { v: c, state: idx < doneUpTo ? "done" : "pending" }; });
+  }
+  function tItemsPending() {
+    return tArr.map(function (c) { return { v: c, state: "pending" }; });
+  }
+
+  steps.push({
+    line: 3,
+    narration: "Lengths: s has " + sArr.length + ", t has " + tArr.length + ". " +
+      (sArr.length === tArr.length ? "They match — continue." : "They differ — cannot be anagrams."),
+    rows: [{ label: "s", items: sItems(0) }, { label: "t", items: tItemsPending() }],
+    map: { label: "char counts", items: [] }
+  });
+
+  if (sArr.length !== tArr.length) {
+    steps.push({
+      line: 4,
+      narration: "<b>Lengths differ — return False.</b>",
+      rows: [{ label: "s", items: sItems(0) }, { label: "t", items: tItemsPending() }],
+      map: { label: "char counts", items: [] }
+    });
+    return steps;
+  }
+
+  var counts = {};
+  function countItems(highlightCh) {
+    return Object.keys(counts).map(function (k) {
+      return { v: k + ":" + counts[k], added: k === highlightCh };
+    });
+  }
+
+  for (var i = 0; i < sArr.length; i++) {
+    var ch = sArr[i];
+    counts[ch] = (counts[ch] || 0) + 1;
+    steps.push({
+      line: 7,
+      narration: "s[" + i + "]='" + ch + "' → count " + ch + ":" + counts[ch] + ".",
+      rows: [{ label: "s", items: sItems(i + 1) }, { label: "t", items: tItemsPending() }],
+      map: { label: "char counts", items: countItems(ch) }
+    });
+  }
+
+  var sDone = sItems(sArr.length);
+
+  for (var j = 0; j < tArr.length; j++) {
+    var tch = tArr[j];
+    var tCur = tArr.map(function (c, idx) {
+      return { v: c, state: idx < j ? "done" : idx === j ? "current" : "pending" };
+    });
+    var present = counts[tch] > 0;
+    steps.push({
+      line: 9,
+      narration: "t[" + j + "]='" + tch + "': " + (present ? ("present with count " + counts[tch] + " — ok.") : "missing or count already 0 — not an anagram."),
+      rows: [{ label: "s", items: sDone }, { label: "t", items: tCur }],
+      map: { label: "char counts", items: countItems(null) }
+    });
+    if (!present) {
+      steps.push({
+        line: 10,
+        narration: "<b>Return False.</b>",
+        rows: [{ label: "s", items: sDone }, { label: "t", items: tCur }],
+        map: { label: "char counts", items: countItems(null) }
+      });
+      return steps;
+    }
+    counts[tch] -= 1;
+    var tDoneSoFar = tArr.map(function (c, idx) {
+      return { v: c, state: idx <= j ? "done" : "pending" };
+    });
+    steps.push({
+      line: 11,
+      narration: "Decrement " + tch + " → " + counts[tch] + ".",
+      rows: [{ label: "s", items: sDone }, { label: "t", items: tDoneSoFar }],
+      map: { label: "char counts", items: countItems(tch) }
+    });
+  }
+
+  steps.push({
+    line: 12,
+    narration: "<b>All counts reached zero — return True.</b>",
+    rows: [{ label: "s", items: sDone }, { label: "t", items: tArr.map(function (c) { return { v: c, state: "hit" }; }) }],
+    map: { label: "char counts", items: countItems(null) }
+  });
+  return steps;
+}
+</script>
 <script src="../shared/viz.js"></script>
+<script>window.initVizForm();</script>
 
   </div>
 </div>

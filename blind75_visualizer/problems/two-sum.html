@@ -33,7 +33,17 @@
     <div class="panel" data-viz-root>
   <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
   <div class="panel-body viz-stage">
-    <div class="viz-example">nums = [2, 7, 11, 15], target = 9  →  [0, 1]</div>
+    <div class="input-form">
+      <div class="input-field">
+      <label for="field-nums">nums</label>
+      <input type="text" id="field-nums" value="2, 7, 11, 15" />
+    </div><div class="input-field">
+      <label for="field-target">target</label>
+      <input type="text" id="field-target" value="9" />
+    </div>
+      <button class="run-btn" data-viz-run>Visualize</button>
+    </div>
+    <div class="input-error" data-viz-error hidden></div>
     <div data-viz-rows></div>
     <div data-viz-map-block>
       <div class="row-label" data-viz-map-label></div>
@@ -54,8 +64,88 @@
     </div>
   </div>
 </div>
-<script>window.STEPS = [{"line": 5, "narration": "Start with an empty map from value \u2192 index.", "rows": [{"label": "nums", "items": [{"v": 2, "state": "pending"}, {"v": 7, "state": "pending"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}], "map": {"label": "seen (value \u2192 index)", "items": []}}, {"line": 7, "narration": "complement = target - 2 = 7.", "rows": [{"label": "nums", "items": [{"v": 2, "state": "current"}, {"v": 7, "state": "pending"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}], "map": {"label": "seen (value \u2192 index)", "items": []}}, {"line": 8, "narration": "7 is not in <code>seen</code> yet.", "rows": [{"label": "nums", "items": [{"v": 2, "state": "current"}, {"v": 7, "state": "pending"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}], "map": {"label": "seen (value \u2192 index)", "items": []}}, {"line": 10, "narration": "Store 2 \u2192 index 0.", "rows": [{"label": "nums", "items": [{"v": 2, "state": "done"}, {"v": 7, "state": "pending"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}], "map": {"label": "seen (value \u2192 index)", "items": [{"v": "2\u21920", "added": true}]}}, {"line": 7, "narration": "complement = target - 7 = 2.", "rows": [{"label": "nums", "items": [{"v": 2, "state": "done"}, {"v": 7, "state": "current"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}], "map": {"label": "seen (value \u2192 index)", "items": [{"v": "2\u21920"}]}}, {"line": 8, "narration": "2 is in <code>seen</code> at index 0 \u2014 match found.", "rows": [{"label": "nums", "items": [{"v": 2, "state": "hit"}, {"v": 7, "state": "current"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}], "map": {"label": "seen (value \u2192 index)", "items": [{"v": "2\u21920"}]}}, {"line": 9, "narration": "<b>Return [0, 1]</b> \u2014 nums[0] + nums[1] = 9.", "rows": [{"label": "nums", "items": [{"v": 2, "state": "hit"}, {"v": 7, "state": "hit"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}], "map": {"label": "seen (value \u2192 index)", "items": [{"v": "2\u21920"}]}}];</script>
+<script>
+window.INPUT_SCHEMA = [{"name": "nums", "label": "nums", "type": "int-array", "default": "2, 7, 11, 15", "maxLen": 30}, {"name": "target", "label": "target", "type": "int", "default": "9"}];
+function generateSteps(nums, target) {
+  var steps = [];
+  var seenMap = {};
+  var order = [];
+
+  steps.push({
+    line: 5,
+    narration: "Start with an empty map from value → index.",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) }],
+    map: { label: "seen (value → index)", items: [] }
+  });
+
+  for (var i = 0; i < nums.length; i++) {
+    var num = nums[i];
+    var complement = target - num;
+
+    steps.push({
+      line: 7,
+      narration: "complement = target - " + num + " = " + complement + ".",
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" };
+      }) }],
+      map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+    });
+
+    if (Object.prototype.hasOwnProperty.call(seenMap, complement)) {
+      var j = seenMap[complement];
+      steps.push({
+        line: 8,
+        narration: complement + " is in <code>seen</code> at index " + j + " — match found.",
+        rows: [{ label: "nums", items: nums.map(function (v, idx) {
+          return { v: v, state: (idx === i || idx === j) ? "hit" : (idx < i ? "done" : "pending") };
+        }) }],
+        map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+      });
+      steps.push({
+        line: 9,
+        narration: "<b>Return [" + j + ", " + i + "]</b> — nums[" + j + "] + nums[" + i + "] = " + target + ".",
+        rows: [{ label: "nums", items: nums.map(function (v, idx) {
+          return { v: v, state: (idx === i || idx === j) ? "hit" : (idx < i ? "done" : "pending") };
+        }) }],
+        map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+      });
+      return steps;
+    }
+
+    steps.push({
+      line: 8,
+      narration: complement + " is not in <code>seen</code> yet.",
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" };
+      }) }],
+      map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+    });
+
+    seenMap[num] = i;
+    order.push(num);
+    steps.push({
+      line: 10,
+      narration: "Store " + num + " → index " + i + ".",
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx <= i ? "done" : "pending" };
+      }) }],
+      map: { label: "seen (value → index)", items: order.map(function (v, idx) {
+        return { v: v + "→" + seenMap[v], added: idx === order.length - 1 };
+      }) }
+    });
+  }
+
+  steps.push({
+    line: 11,
+    narration: "<b>No pair found — return [].</b>",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "done" }; }) }],
+    map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+  });
+  return steps;
+}
+</script>
 <script src="../shared/viz.js"></script>
+<script>window.initVizForm();</script>
 
   </div>
 </div>

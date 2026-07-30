@@ -61,35 +61,65 @@ class Solution:
                 return True
             seen.add(num)
         return False''',
-        "steps": [
-            {"line": 5, "narration": "Start with an empty set to track numbers we've seen.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}],
-             "map": {"label": "seen (set)", "items": []}},
-            {"line": 7, "narration": "Check if <b>1</b> is in <code>seen</code> — the set is empty, so no.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "current"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}],
-             "map": {"label": "seen (set)", "items": []}},
-            {"line": 9, "narration": "Not found — add <b>1</b> to <code>seen</code>.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}],
-             "map": {"label": "seen (set)", "items": [{"v": 1, "added": True}]}},
-            {"line": 7, "narration": "Check if <b>2</b> is in <code>seen</code> — not yet.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "current"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}],
-             "map": {"label": "seen (set)", "items": [{"v": 1, "added": False}]}},
-            {"line": 9, "narration": "Not found — add <b>2</b> to <code>seen</code>.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}],
-             "map": {"label": "seen (set)", "items": [{"v": 1, "added": False}, {"v": 2, "added": True}]}},
-            {"line": 7, "narration": "Check if <b>3</b> is in <code>seen</code> — not yet.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "current"}, {"v": 1, "state": "pending"}]}],
-             "map": {"label": "seen (set)", "items": [{"v": 1, "added": False}, {"v": 2, "added": False}]}},
-            {"line": 9, "narration": "Not found — add <b>3</b> to <code>seen</code>.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 1, "state": "pending"}]}],
-             "map": {"label": "seen (set)", "items": [{"v": 1, "added": False}, {"v": 2, "added": False}, {"v": 3, "added": True}]}},
-            {"line": 7, "narration": "Check if <b>1</b> is in <code>seen</code> — yes, added back at index 0!",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 1, "state": "current"}]}],
-             "map": {"label": "seen (set)", "items": [{"v": 1, "added": False}, {"v": 2, "added": False}, {"v": 3, "added": False}]}},
-            {"line": 8, "narration": "<b>Duplicate found — return True.</b>",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "hit"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 1, "state": "hit"}]}],
-             "map": {"label": "seen (set)", "items": [{"v": 1, "added": False}, {"v": 2, "added": False}, {"v": 3, "added": False}]}},
-        ],
+        "inputs": [{"name": "nums", "label": "nums", "type": "int-array", "default": "1, 2, 3, 1", "maxLen": 30}],
+        "js": '''function generateSteps(nums) {
+  var steps = [];
+  var seen = [];
+  var seenSet = {};
+
+  steps.push({
+    line: 5,
+    narration: "Start with an empty set to track numbers we've seen.",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) }],
+    map: { label: "seen (set)", items: [] }
+  });
+
+  for (var i = 0; i < nums.length; i++) {
+    var num = nums[i];
+    var found = Object.prototype.hasOwnProperty.call(seenSet, num);
+
+    steps.push({
+      line: 7,
+      narration: "Check if <b>" + num + "</b> is in <code>seen</code> — " + (found ? "yes!" : "no."),
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" };
+      }) }],
+      map: { label: "seen (set)", items: seen.map(function (v) { return { v: v }; }) }
+    });
+
+    if (found) {
+      var firstIdx = nums.indexOf(num);
+      steps.push({
+        line: 8,
+        narration: "<b>Duplicate found — return True.</b>",
+        rows: [{ label: "nums", items: nums.map(function (v, idx) {
+          return { v: v, state: (idx === i || idx === firstIdx) ? "hit" : (idx < i ? "done" : "pending") };
+        }) }],
+        map: { label: "seen (set)", items: seen.map(function (v) { return { v: v }; }) }
+      });
+      return steps;
+    }
+
+    seenSet[num] = true;
+    seen.push(num);
+    steps.push({
+      line: 9,
+      narration: "Not found — add <b>" + num + "</b> to <code>seen</code>.",
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx <= i ? "done" : "pending" };
+      }) }],
+      map: { label: "seen (set)", items: seen.map(function (v, idx) { return { v: v, added: idx === seen.length - 1 }; }) }
+    });
+  }
+
+  steps.push({
+    line: 10,
+    narration: "<b>No duplicates found — return False.</b>",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "done" }; }) }],
+    map: { label: "seen (set)", items: seen.map(function (v) { return { v: v }; }) }
+  });
+  return steps;
+}''',
     },
     {
         "slug": "valid-anagram",
@@ -121,26 +151,101 @@ class Solution:
                 return False
             counts[ch] -= 1
         return True''',
-        "steps": [
-            {"line": 3, "narration": "Lengths match (7 = 7) — an anagram is still possible.",
-             "rows": [{"label": "s", "items": [{"v": c, "state": "pending"} for c in "anagram"]}, {"label": "t", "items": [{"v": c, "state": "pending"} for c in "nagaram"]}],
-             "map": {"label": "char counts", "items": []}},
-            {"line": 7, "narration": "Count each character in <b>s</b>: a→3, n→1, g→1, r→1, m→1.",
-             "rows": [{"label": "s", "items": [{"v": c, "state": "done"} for c in "anagram"]}, {"label": "t", "items": [{"v": c, "state": "pending"} for c in "nagaram"]}],
-             "map": {"label": "char counts", "items": [{"v": "a:3", "added": True}, {"v": "n:1", "added": True}, {"v": "g:1", "added": True}, {"v": "r:1", "added": True}, {"v": "m:1", "added": True}]}},
-            {"line": 9, "narration": "t[0]='n' is present with count 1 — ok so far.",
-             "rows": [{"label": "s", "items": [{"v": c, "state": "done"} for c in "anagram"]}, {"label": "t", "items": [{"v": "n", "state": "current"}] + [{"v": c, "state": "pending"} for c in "agaram"]}],
-             "map": {"label": "char counts", "items": [{"v": "a:3"}, {"v": "n:1"}, {"v": "g:1"}, {"v": "r:1"}, {"v": "m:1"}]}},
-            {"line": 11, "narration": "Decrement n → 0.",
-             "rows": [{"label": "s", "items": [{"v": c, "state": "done"} for c in "anagram"]}, {"label": "t", "items": [{"v": "n", "state": "done"}] + [{"v": c, "state": "pending"} for c in "agaram"]}],
-             "map": {"label": "char counts", "items": [{"v": "a:3"}, {"v": "n:0"}, {"v": "g:1"}, {"v": "r:1"}, {"v": "m:1"}]}},
-            {"line": 9, "narration": "Continue matching the rest of t the same way — a, g, a, r, a, m each found with count > 0, decrementing as we go.",
-             "rows": [{"label": "s", "items": [{"v": c, "state": "done"} for c in "anagram"]}, {"label": "t", "items": [{"v": c, "state": "done"} for c in "nagaram"]}],
-             "map": {"label": "char counts", "items": [{"v": "a:0"}, {"v": "n:0"}, {"v": "g:0"}, {"v": "r:0"}, {"v": "m:0"}]}},
-            {"line": 12, "narration": "<b>Every count reached zero — return True.</b> t is an anagram of s.",
-             "rows": [{"label": "s", "items": [{"v": c, "state": "done"} for c in "anagram"]}, {"label": "t", "items": [{"v": c, "state": "hit"} for c in "nagaram"]}],
-             "map": {"label": "char counts", "items": [{"v": "a:0"}, {"v": "n:0"}, {"v": "g:0"}, {"v": "r:0"}, {"v": "m:0"}]}},
+        "inputs": [
+            {"name": "s", "label": "s", "type": "string", "default": "anagram", "maxLen": 24},
+            {"name": "t", "label": "t", "type": "string", "default": "nagaram", "maxLen": 24},
         ],
+        "js": '''function generateSteps(s, t) {
+  var steps = [];
+  var sArr = s.split("");
+  var tArr = t.split("");
+
+  function sItems(doneUpTo) {
+    return sArr.map(function (c, idx) { return { v: c, state: idx < doneUpTo ? "done" : "pending" }; });
+  }
+  function tItemsPending() {
+    return tArr.map(function (c) { return { v: c, state: "pending" }; });
+  }
+
+  steps.push({
+    line: 3,
+    narration: "Lengths: s has " + sArr.length + ", t has " + tArr.length + ". " +
+      (sArr.length === tArr.length ? "They match — continue." : "They differ — cannot be anagrams."),
+    rows: [{ label: "s", items: sItems(0) }, { label: "t", items: tItemsPending() }],
+    map: { label: "char counts", items: [] }
+  });
+
+  if (sArr.length !== tArr.length) {
+    steps.push({
+      line: 4,
+      narration: "<b>Lengths differ — return False.</b>",
+      rows: [{ label: "s", items: sItems(0) }, { label: "t", items: tItemsPending() }],
+      map: { label: "char counts", items: [] }
+    });
+    return steps;
+  }
+
+  var counts = {};
+  function countItems(highlightCh) {
+    return Object.keys(counts).map(function (k) {
+      return { v: k + ":" + counts[k], added: k === highlightCh };
+    });
+  }
+
+  for (var i = 0; i < sArr.length; i++) {
+    var ch = sArr[i];
+    counts[ch] = (counts[ch] || 0) + 1;
+    steps.push({
+      line: 7,
+      narration: "s[" + i + "]='" + ch + "' → count " + ch + ":" + counts[ch] + ".",
+      rows: [{ label: "s", items: sItems(i + 1) }, { label: "t", items: tItemsPending() }],
+      map: { label: "char counts", items: countItems(ch) }
+    });
+  }
+
+  var sDone = sItems(sArr.length);
+
+  for (var j = 0; j < tArr.length; j++) {
+    var tch = tArr[j];
+    var tCur = tArr.map(function (c, idx) {
+      return { v: c, state: idx < j ? "done" : idx === j ? "current" : "pending" };
+    });
+    var present = counts[tch] > 0;
+    steps.push({
+      line: 9,
+      narration: "t[" + j + "]='" + tch + "': " + (present ? ("present with count " + counts[tch] + " — ok.") : "missing or count already 0 — not an anagram."),
+      rows: [{ label: "s", items: sDone }, { label: "t", items: tCur }],
+      map: { label: "char counts", items: countItems(null) }
+    });
+    if (!present) {
+      steps.push({
+        line: 10,
+        narration: "<b>Return False.</b>",
+        rows: [{ label: "s", items: sDone }, { label: "t", items: tCur }],
+        map: { label: "char counts", items: countItems(null) }
+      });
+      return steps;
+    }
+    counts[tch] -= 1;
+    var tDoneSoFar = tArr.map(function (c, idx) {
+      return { v: c, state: idx <= j ? "done" : "pending" };
+    });
+    steps.push({
+      line: 11,
+      narration: "Decrement " + tch + " → " + counts[tch] + ".",
+      rows: [{ label: "s", items: sDone }, { label: "t", items: tDoneSoFar }],
+      map: { label: "char counts", items: countItems(tch) }
+    });
+  }
+
+  steps.push({
+    line: 12,
+    narration: "<b>All counts reached zero — return True.</b>",
+    rows: [{ label: "s", items: sDone }, { label: "t", items: tArr.map(function (c) { return { v: c, state: "hit" }; }) }],
+    map: { label: "char counts", items: countItems(null) }
+  });
+  return steps;
+}''',
     },
     {
         "slug": "two-sum",
@@ -170,29 +275,87 @@ class Solution:
                 return [seen[complement], i]
             seen[num] = i
         return []''',
-        "steps": [
-            {"line": 5, "narration": "Start with an empty map from value → index.",
-             "rows": [{"label": "nums", "items": [{"v": 2, "state": "pending"}, {"v": 7, "state": "pending"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}],
-             "map": {"label": "seen (value → index)", "items": []}},
-            {"line": 7, "narration": "complement = target - 2 = 7.",
-             "rows": [{"label": "nums", "items": [{"v": 2, "state": "current"}, {"v": 7, "state": "pending"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}],
-             "map": {"label": "seen (value → index)", "items": []}},
-            {"line": 8, "narration": "7 is not in <code>seen</code> yet.",
-             "rows": [{"label": "nums", "items": [{"v": 2, "state": "current"}, {"v": 7, "state": "pending"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}],
-             "map": {"label": "seen (value → index)", "items": []}},
-            {"line": 10, "narration": "Store 2 → index 0.",
-             "rows": [{"label": "nums", "items": [{"v": 2, "state": "done"}, {"v": 7, "state": "pending"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}],
-             "map": {"label": "seen (value → index)", "items": [{"v": "2→0", "added": True}]}},
-            {"line": 7, "narration": "complement = target - 7 = 2.",
-             "rows": [{"label": "nums", "items": [{"v": 2, "state": "done"}, {"v": 7, "state": "current"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}],
-             "map": {"label": "seen (value → index)", "items": [{"v": "2→0"}]}},
-            {"line": 8, "narration": "2 is in <code>seen</code> at index 0 — match found.",
-             "rows": [{"label": "nums", "items": [{"v": 2, "state": "hit"}, {"v": 7, "state": "current"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}],
-             "map": {"label": "seen (value → index)", "items": [{"v": "2→0"}]}},
-            {"line": 9, "narration": "<b>Return [0, 1]</b> — nums[0] + nums[1] = 9.",
-             "rows": [{"label": "nums", "items": [{"v": 2, "state": "hit"}, {"v": 7, "state": "hit"}, {"v": 11, "state": "pending"}, {"v": 15, "state": "pending"}]}],
-             "map": {"label": "seen (value → index)", "items": [{"v": "2→0"}]}},
+        "inputs": [
+            {"name": "nums", "label": "nums", "type": "int-array", "default": "2, 7, 11, 15", "maxLen": 30},
+            {"name": "target", "label": "target", "type": "int", "default": "9"},
         ],
+        "js": '''function generateSteps(nums, target) {
+  var steps = [];
+  var seenMap = {};
+  var order = [];
+
+  steps.push({
+    line: 5,
+    narration: "Start with an empty map from value → index.",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) }],
+    map: { label: "seen (value → index)", items: [] }
+  });
+
+  for (var i = 0; i < nums.length; i++) {
+    var num = nums[i];
+    var complement = target - num;
+
+    steps.push({
+      line: 7,
+      narration: "complement = target - " + num + " = " + complement + ".",
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" };
+      }) }],
+      map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+    });
+
+    if (Object.prototype.hasOwnProperty.call(seenMap, complement)) {
+      var j = seenMap[complement];
+      steps.push({
+        line: 8,
+        narration: complement + " is in <code>seen</code> at index " + j + " — match found.",
+        rows: [{ label: "nums", items: nums.map(function (v, idx) {
+          return { v: v, state: (idx === i || idx === j) ? "hit" : (idx < i ? "done" : "pending") };
+        }) }],
+        map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+      });
+      steps.push({
+        line: 9,
+        narration: "<b>Return [" + j + ", " + i + "]</b> — nums[" + j + "] + nums[" + i + "] = " + target + ".",
+        rows: [{ label: "nums", items: nums.map(function (v, idx) {
+          return { v: v, state: (idx === i || idx === j) ? "hit" : (idx < i ? "done" : "pending") };
+        }) }],
+        map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+      });
+      return steps;
+    }
+
+    steps.push({
+      line: 8,
+      narration: complement + " is not in <code>seen</code> yet.",
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" };
+      }) }],
+      map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+    });
+
+    seenMap[num] = i;
+    order.push(num);
+    steps.push({
+      line: 10,
+      narration: "Store " + num + " → index " + i + ".",
+      rows: [{ label: "nums", items: nums.map(function (v, idx) {
+        return { v: v, state: idx <= i ? "done" : "pending" };
+      }) }],
+      map: { label: "seen (value → index)", items: order.map(function (v, idx) {
+        return { v: v + "→" + seenMap[v], added: idx === order.length - 1 };
+      }) }
+    });
+  }
+
+  steps.push({
+    line: 11,
+    narration: "<b>No pair found — return [].</b>",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "done" }; }) }],
+    map: { label: "seen (value → index)", items: order.map(function (v) { return { v: v + "→" + seenMap[v] }; }) }
+  });
+  return steps;
+}''',
     },
     {
         "slug": "group-anagrams",
@@ -221,32 +384,62 @@ class Solution:
             key = "".join(sorted(s))
             groups[key].append(s)
         return list(groups.values())''',
-        "steps": [
-            {"line": 6, "narration": "Start with an empty map from sorted-letters key → list of words.",
-             "rows": [{"label": "strs", "items": [{"v": w, "state": "pending"} for w in ["eat", "tea", "tan", "ate", "nat", "bat"]]}],
-             "map": {"label": "groups (key → words)", "items": []}},
-            {"line": 8, "narration": "'eat' sorted → 'aet'.",
-             "rows": [{"label": "strs", "items": [{"v": "eat", "state": "current"}, {"v": "tea", "state": "pending"}, {"v": "tan", "state": "pending"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}],
-             "map": {"label": "groups (key → words)", "items": []}},
-            {"line": 9, "narration": "Add 'eat' under key 'aet'.",
-             "rows": [{"label": "strs", "items": [{"v": "eat", "state": "done"}, {"v": "tea", "state": "pending"}, {"v": "tan", "state": "pending"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}],
-             "map": {"label": "groups (key → words)", "items": [{"v": "aet: [eat]", "added": True}]}},
-            {"line": 8, "narration": "'tea' sorted → 'aet' too — same key as 'eat'.",
-             "rows": [{"label": "strs", "items": [{"v": "eat", "state": "done"}, {"v": "tea", "state": "current"}, {"v": "tan", "state": "pending"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}],
-             "map": {"label": "groups (key → words)", "items": [{"v": "aet: [eat]"}]}},
-            {"line": 9, "narration": "Append 'tea' to the 'aet' group.",
-             "rows": [{"label": "strs", "items": [{"v": "eat", "state": "done"}, {"v": "tea", "state": "done"}, {"v": "tan", "state": "pending"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}],
-             "map": {"label": "groups (key → words)", "items": [{"v": "aet: [eat, tea]", "added": True}]}},
-            {"line": 8, "narration": "'tan' sorted → 'ant' — a brand new key.",
-             "rows": [{"label": "strs", "items": [{"v": "eat", "state": "done"}, {"v": "tea", "state": "done"}, {"v": "tan", "state": "current"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}],
-             "map": {"label": "groups (key → words)", "items": [{"v": "aet: [eat, tea]"}]}},
-            {"line": 9, "narration": "Continue the same way: 'ate'→aet (joins eat/tea), 'nat'→ant (joins tan), 'bat'→abt (new group).",
-             "rows": [{"label": "strs", "items": [{"v": w, "state": "done"} for w in ["eat", "tea", "tan", "ate", "nat", "bat"]]}],
-             "map": {"label": "groups (key → words)", "items": [{"v": "aet: [eat, tea, ate]", "added": True}, {"v": "ant: [tan, nat]", "added": True}, {"v": "abt: [bat]", "added": True}]}},
-            {"line": 10, "narration": "<b>Return the grouped lists</b> — each group is a full set of anagrams.",
-             "rows": [{"label": "strs", "items": [{"v": w, "state": "hit"} for w in ["eat", "tea", "tan", "ate", "nat", "bat"]]}],
-             "map": {"label": "groups (key → words)", "items": [{"v": "aet: [eat, tea, ate]"}, {"v": "ant: [tan, nat]"}, {"v": "abt: [bat]"}]}},
-        ],
+        "inputs": [{"name": "strs", "label": "strs", "type": "string-array", "default": "eat, tea, tan, ate, nat, bat", "maxLen": 12}],
+        "js": '''function generateSteps(strs) {
+  var steps = [];
+  var groups = {};
+  var order = [];
+
+  function groupItems(highlightKey) {
+    return order.map(function (k) {
+      return { v: k + ": [" + groups[k].join(", ") + "]", added: k === highlightKey };
+    });
+  }
+
+  steps.push({
+    line: 6,
+    narration: "Start with an empty map from sorted-letters key → list of words.",
+    rows: [{ label: "strs", items: strs.map(function (w) { return { v: w, state: "pending" }; }) }],
+    map: { label: "groups (key → words)", items: [] }
+  });
+
+  for (var i = 0; i < strs.length; i++) {
+    var w = strs[i];
+    var key = w.split("").sort().join("");
+
+    steps.push({
+      line: 8,
+      narration: "'" + w + "' sorted → '" + key + "'.",
+      rows: [{ label: "strs", items: strs.map(function (v, idx) {
+        return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" };
+      }) }],
+      map: { label: "groups (key → words)", items: groupItems(null) }
+    });
+
+    if (!Object.prototype.hasOwnProperty.call(groups, key)) {
+      groups[key] = [];
+      order.push(key);
+    }
+    groups[key].push(w);
+
+    steps.push({
+      line: 9,
+      narration: "Add '" + w + "' under key '" + key + "'.",
+      rows: [{ label: "strs", items: strs.map(function (v, idx) {
+        return { v: v, state: idx <= i ? "done" : "pending" };
+      }) }],
+      map: { label: "groups (key → words)", items: groupItems(key) }
+    });
+  }
+
+  steps.push({
+    line: 10,
+    narration: "<b>Return the grouped lists</b> — each group is a full set of anagrams.",
+    rows: [{ label: "strs", items: strs.map(function (v) { return { v: v, state: "hit" }; }) }],
+    map: { label: "groups (key → words)", items: groupItems(null) }
+  });
+  return steps;
+}''',
     },
     {
         "slug": "top-k-frequent-elements",
@@ -282,29 +475,83 @@ class Solution:
                 if len(result) == k:
                     return result
         return result''',
-        "steps": [
-            {"line": 6, "narration": "Count frequency of each number: 1→3, 2→2, 3→1.",
-             "rows": [{"label": "nums", "items": [{"v": v, "state": "pending"} for v in [1, 1, 1, 2, 2, 3]]}],
-             "map": {"label": "count", "items": [{"v": "1:3", "added": True}, {"v": "2:2", "added": True}, {"v": "3:1", "added": True}]}},
-            {"line": 9, "narration": "Bucket numbers by frequency (bucket index = frequency): bucket[3]=[1], bucket[2]=[2], bucket[1]=[3].",
-             "rows": [{"label": "nums", "items": [{"v": v, "state": "done"} for v in [1, 1, 1, 2, 2, 3]]}],
-             "map": {"label": "buckets (freq → nums)", "items": [{"v": "3 → [1]", "added": True}, {"v": "2 → [2]", "added": True}, {"v": "1 → [3]", "added": True}]}},
-            {"line": 13, "narration": "Walk buckets from highest frequency down. freq=3: take 1.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "current"}, {"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}]}],
-             "map": {"label": "buckets (freq → nums)", "items": [{"v": "3 → [1]"}, {"v": "2 → [2]"}, {"v": "1 → [3]"}]}},
-            {"line": 14, "narration": "Add 1 to result → [1]. Not yet k=2 items.",
-             "rows": [{"label": "result", "items": [{"v": 1, "state": "done"}]}],
-             "map": {"label": "buckets (freq → nums)", "items": [{"v": "3 → [1]"}, {"v": "2 → [2]"}, {"v": "1 → [3]"}]}},
-            {"line": 13, "narration": "freq=2: take 2.",
-             "rows": [{"label": "result", "items": [{"v": 1, "state": "done"}]}],
-             "map": {"label": "buckets (freq → nums)", "items": [{"v": "3 → [1]"}, {"v": "2 → [2]"}, {"v": "1 → [3]"}]}},
-            {"line": 14, "narration": "Add 2 to result → [1, 2].",
-             "rows": [{"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}]}],
-             "map": {"label": "buckets (freq → nums)", "items": [{"v": "3 → [1]"}, {"v": "2 → [2]"}, {"v": "1 → [3]"}]}},
-            {"line": 16, "narration": "<b>len(result) == k — return [1, 2].</b> Reached the 2 most frequent elements.",
-             "rows": [{"label": "result", "items": [{"v": 1, "state": "hit"}, {"v": 2, "state": "hit"}]}],
-             "map": {"label": "buckets (freq → nums)", "items": [{"v": "3 → [1]"}, {"v": "2 → [2]"}, {"v": "1 → [3]"}]}},
+        "inputs": [
+            {"name": "nums", "label": "nums", "type": "int-array", "default": "1, 1, 1, 2, 2, 3", "maxLen": 30},
+            {"name": "k", "label": "k", "type": "int", "default": "2"},
         ],
+        "js": '''function generateSteps(nums, k) {
+  var steps = [];
+  var counts = {};
+  var countOrder = [];
+  nums.forEach(function (n) {
+    if (!Object.prototype.hasOwnProperty.call(counts, n)) { counts[n] = 0; countOrder.push(n); }
+    counts[n] += 1;
+  });
+
+  steps.push({
+    line: 6,
+    narration: "Count frequency of each number: " + countOrder.map(function (n) { return n + "→" + counts[n]; }).join(", ") + ".",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) }],
+    map: { label: "count", items: countOrder.map(function (n) { return { v: n + ":" + counts[n], added: true }; }) }
+  });
+
+  var maxFreq = nums.length;
+  var buckets = [];
+  for (var f = 0; f <= maxFreq; f++) buckets.push([]);
+  countOrder.forEach(function (n) { buckets[counts[n]].push(n); });
+
+  function bucketItems() {
+    var arr = [];
+    for (var f2 = buckets.length - 1; f2 >= 1; f2--) {
+      if (buckets[f2].length) arr.push({ v: f2 + " → [" + buckets[f2].join(", ") + "]" });
+    }
+    return arr;
+  }
+
+  steps.push({
+    line: 9,
+    narration: "Bucket numbers by frequency (bucket index = frequency).",
+    rows: [{ label: "nums", items: nums.map(function (v) { return { v: v, state: "done" }; }) }],
+    map: { label: "buckets (freq → nums)", items: bucketItems() }
+  });
+
+  var result = [];
+  for (var freq = buckets.length - 1; freq >= 1; freq--) {
+    for (var b = 0; b < buckets[freq].length; b++) {
+      var num = buckets[freq][b];
+      steps.push({
+        line: 13,
+        narration: "freq=" + freq + ": take " + num + ".",
+        rows: [{ label: "result", items: result.map(function (v) { return { v: v, state: "done" }; }) }],
+        map: { label: "buckets (freq → nums)", items: bucketItems() }
+      });
+      result.push(num);
+      steps.push({
+        line: 14,
+        narration: "Add " + num + " to result → [" + result.join(", ") + "].",
+        rows: [{ label: "result", items: result.map(function (v) { return { v: v, state: "done" }; }) }],
+        map: { label: "buckets (freq → nums)", items: bucketItems() }
+      });
+      if (result.length === k) {
+        steps.push({
+          line: 16,
+          narration: "<b>len(result) == k — return [" + result.join(", ") + "].</b>",
+          rows: [{ label: "result", items: result.map(function (v) { return { v: v, state: "hit" }; }) }],
+          map: { label: "buckets (freq → nums)", items: bucketItems() }
+        });
+        return steps;
+      }
+    }
+  }
+
+  steps.push({
+    line: 17,
+    narration: "<b>Return [" + result.join(", ") + "].</b>",
+    rows: [{ label: "result", items: result.map(function (v) { return { v: v, state: "hit" }; }) }],
+    map: { label: "buckets (freq → nums)", items: bucketItems() }
+  });
+  return steps;
+}''',
     },
     {
         "slug": "product-of-array-except-self",
@@ -341,38 +588,78 @@ class Solution:
             postfix *= nums[i]
 
         return result''',
-        "steps": [
-            {"line": 6, "narration": "Initialize result with all 1s.",
-             "rows": [{"label": "nums", "items": [{"v": v, "state": "pending"} for v in [1, 2, 3, 4]]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}]}],
-             "map": None},
-            {"line": 10, "narration": "result[0] = prefix (1); then prefix *= nums[0] → 1.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "current"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 4, "state": "pending"}]}, {"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}]}],
-             "map": None},
-            {"line": 10, "narration": "result[1] = prefix (1); prefix *= nums[1] → 2.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "current"}, {"v": 3, "state": "pending"}, {"v": 4, "state": "pending"}]}, {"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}]}],
-             "map": None},
-            {"line": 10, "narration": "result[2] = prefix (2); prefix *= nums[2] → 6.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "current"}, {"v": 4, "state": "pending"}]}, {"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 1, "state": "pending"}]}],
-             "map": None},
-            {"line": 10, "narration": "result[3] = prefix (6); prefix *= nums[3] → 24. Left pass done: result = [1, 1, 2, 6].",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 4, "state": "current"}]}, {"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 6, "state": "done"}]}],
-             "map": None},
-            {"line": 15, "narration": "Now sweep from the right, tracking the running product of everything to the right (postfix, starts at 1).",
-             "rows": [{"label": "nums", "items": [{"v": v, "state": "pending"} for v in [1, 2, 3, 4]]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 6, "state": "pending"}]}],
-             "map": None},
-            {"line": 15, "narration": "result[3] = 6 × postfix(1) = 6; postfix *= nums[3] → 4.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 4, "state": "current"}]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 6, "state": "done"}]}],
-             "map": None},
-            {"line": 15, "narration": "result[2] = 2 × postfix(4) = 8; postfix *= nums[2] → 12.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "current"}, {"v": 4, "state": "done"}]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 8, "state": "done"}, {"v": 6, "state": "done"}]}],
-             "map": None},
-            {"line": 15, "narration": "result[1] = 1 × postfix(12) = 12; postfix *= nums[1] → 24.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "current"}, {"v": 3, "state": "done"}, {"v": 4, "state": "done"}]}, {"label": "result", "items": [{"v": 1, "state": "pending"}, {"v": 12, "state": "done"}, {"v": 8, "state": "done"}, {"v": 6, "state": "done"}]}],
-             "map": None},
-            {"line": 18, "narration": "<b>result[0] = 1 × postfix(24) = 24.</b> Final: [24, 12, 8, 6] — no division used.",
-             "rows": [{"label": "nums", "items": [{"v": 1, "state": "hit"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 4, "state": "done"}]}, {"label": "result", "items": [{"v": 24, "state": "hit"}, {"v": 12, "state": "hit"}, {"v": 8, "state": "hit"}, {"v": 6, "state": "hit"}]}],
-             "map": None},
-        ],
+        "inputs": [{"name": "nums", "label": "nums", "type": "int-array", "default": "1, 2, 3, 4", "maxLen": 20}],
+        "js": '''function generateSteps(nums) {
+  var steps = [];
+  var n = nums.length;
+  var result = new Array(n).fill(1);
+
+  steps.push({
+    line: 6,
+    narration: "Initialize result with all 1s.",
+    rows: [
+      { label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) },
+      { label: "result", items: result.map(function (v) { return { v: v, state: "pending" }; }) }
+    ],
+    map: null
+  });
+
+  var prefix = 1;
+  for (var i = 0; i < n; i++) {
+    var before = prefix;
+    result[i] = prefix;
+    var nextPrefix = prefix * nums[i];
+    steps.push({
+      line: 10,
+      narration: "result[" + i + "] = prefix (" + before + "); prefix *= nums[" + i + "] → " + nextPrefix + ".",
+      rows: [
+        { label: "nums", items: nums.map(function (v, idx) { return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" }; }) },
+        { label: "result", items: result.map(function (v, idx) { return { v: v, state: idx <= i ? "done" : "pending" }; }) }
+      ],
+      map: null
+    });
+    prefix = nextPrefix;
+  }
+
+  steps.push({
+    line: 13,
+    narration: "Now sweep from the right, tracking postfix (starts at 1).",
+    rows: [
+      { label: "nums", items: nums.map(function (v) { return { v: v, state: "pending" }; }) },
+      { label: "result", items: result.map(function (v) { return { v: v, state: "pending" }; }) }
+    ],
+    map: null
+  });
+
+  var postfix = 1;
+  for (var j = n - 1; j >= 0; j--) {
+    var beforeVal = result[j];
+    var beforePostfix = postfix;
+    result[j] = result[j] * postfix;
+    var nextPostfix = postfix * nums[j];
+    steps.push({
+      line: 15,
+      narration: "result[" + j + "] = " + beforeVal + " × postfix(" + beforePostfix + ") = " + result[j] + "; postfix *= nums[" + j + "] → " + nextPostfix + ".",
+      rows: [
+        { label: "nums", items: nums.map(function (v, idx) { return { v: v, state: idx > j ? "done" : idx === j ? "current" : "pending" }; }) },
+        { label: "result", items: result.map(function (v, idx) { return { v: v, state: idx >= j ? "done" : "pending" }; }) }
+      ],
+      map: null
+    });
+    postfix = nextPostfix;
+  }
+
+  steps.push({
+    line: 18,
+    narration: "<b>Return [" + result.join(", ") + "]</b> — no division used.",
+    rows: [
+      { label: "nums", items: nums.map(function (v) { return { v: v, state: "hit" }; }) },
+      { label: "result", items: result.map(function (v) { return { v: v, state: "hit" }; }) }
+    ],
+    map: null
+  });
+  return steps;
+}''',
     },
     {
         "slug": "valid-sudoku",
@@ -445,35 +732,78 @@ class Solution:
                 longest = max(longest, length)
 
         return longest''',
-        "steps": [
-            {"line": 4, "narration": "Put every number in a set for O(1) lookups.",
-             "rows": [{"label": "nums", "items": [{"v": v, "state": "pending"} for v in [100, 4, 200, 1, 3, 2]]}],
-             "map": {"label": "num_set", "items": [{"v": 100, "added": True}, {"v": 4, "added": True}, {"v": 200, "added": True}, {"v": 1, "added": True}, {"v": 3, "added": True}, {"v": 2, "added": True}]}},
-            {"line": 8, "narration": "100: is 99 in the set? No — 100 could start a streak.",
-             "rows": [{"label": "nums", "items": [{"v": 100, "state": "current"}, {"v": 4, "state": "pending"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}],
-             "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}},
-            {"line": 10, "narration": "Count forward from 100: 101 is not in the set, so this streak has length 1. Best so far: 1.",
-             "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "pending"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}],
-             "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}},
-            {"line": 8, "narration": "4: is 3 in the set? Yes — so 4 is NOT a streak start; skip it.",
-             "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "current"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}],
-             "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}},
-            {"line": 8, "narration": "200: is 199 in the set? No — 200 could start a streak. Counting forward finds length 1 (best stays 1).",
-             "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "done"}, {"v": 200, "state": "current"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}],
-             "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}},
-            {"line": 8, "narration": "1: is 0 in the set? No — 1 could start a streak.",
-             "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "done"}, {"v": 200, "state": "done"}, {"v": 1, "state": "current"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}],
-             "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}},
-            {"line": 10, "narration": "Count forward from 1: 2, 3, 4 are all in the set, 5 is not → streak length 4.",
-             "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "hit"}, {"v": 200, "state": "done"}, {"v": 1, "state": "hit"}, {"v": 3, "state": "hit"}, {"v": 2, "state": "hit"}]}],
-             "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}},
-            {"line": 11, "narration": "New best streak: 4 (1 → 2 → 3 → 4). The remaining numbers (3, 2) fail the 'num - 1 not in set' check and are skipped.",
-             "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "hit"}, {"v": 200, "state": "done"}, {"v": 1, "state": "hit"}, {"v": 3, "state": "hit"}, {"v": 2, "state": "hit"}]}],
-             "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}},
-            {"line": 13, "narration": "<b>Return 4</b> — the longest run is 1 → 2 → 3 → 4.",
-             "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "hit"}, {"v": 200, "state": "done"}, {"v": 1, "state": "hit"}, {"v": 3, "state": "hit"}, {"v": 2, "state": "hit"}]}],
-             "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}},
-        ],
+        "inputs": [{"name": "nums", "label": "nums", "type": "int-array", "default": "100, 4, 200, 1, 3, 2", "maxLen": 30}],
+        "js": '''function generateSteps(nums) {
+  var steps = [];
+  var uniq = [];
+  var seenVal = {};
+  nums.forEach(function (v) {
+    if (!Object.prototype.hasOwnProperty.call(seenVal, v)) { seenVal[v] = true; uniq.push(v); }
+  });
+  var numSet = {};
+  uniq.forEach(function (v) { numSet[v] = true; });
+
+  var state = {};
+  nums.forEach(function (v) { state[v] = "pending"; });
+
+  function rowsSnapshot() {
+    return nums.map(function (v) { return { v: v, state: state[v] }; });
+  }
+  function setItems() {
+    return uniq.map(function (v) { return { v: v }; });
+  }
+
+  steps.push({
+    line: 4,
+    narration: "Put every number in a set for O(1) lookups.",
+    rows: [{ label: "nums", items: rowsSnapshot() }],
+    map: { label: "num_set", items: uniq.map(function (v) { return { v: v, added: true }; }) }
+  });
+
+  var longest = 0;
+  for (var i = 0; i < uniq.length; i++) {
+    var num = uniq[i];
+    state[num] = "current";
+    var hasLower = Object.prototype.hasOwnProperty.call(numSet, num - 1);
+    steps.push({
+      line: 8,
+      narration: num + ": is " + (num - 1) + " in the set? " + (hasLower ? "Yes — not a streak start; skip." : "No — could start a streak."),
+      rows: [{ label: "nums", items: rowsSnapshot() }],
+      map: { label: "num_set", items: setItems() }
+    });
+
+    if (hasLower) {
+      state[num] = "done";
+      continue;
+    }
+
+    var length = 1;
+    while (Object.prototype.hasOwnProperty.call(numSet, num + length)) length += 1;
+
+    var isNewBest = length > longest;
+    if (isNewBest) {
+      longest = length;
+      for (var k = 0; k < length; k++) state[num + k] = "hit";
+    } else {
+      state[num] = "done";
+    }
+
+    steps.push({
+      line: 10,
+      narration: "Count forward from " + num + ": streak length " + length + ". " + (isNewBest ? ("New best: " + length + ".") : ""),
+      rows: [{ label: "nums", items: rowsSnapshot() }],
+      map: { label: "num_set", items: setItems() }
+    });
+  }
+
+  steps.push({
+    line: 13,
+    narration: "<b>Return " + longest + "</b> — the longest run has length " + longest + ".",
+    rows: [{ label: "nums", items: rowsSnapshot() }],
+    map: { label: "num_set", items: setItems() }
+  });
+  return steps;
+}''',
     },
 
     # ---------------------------------------------------------------- Two Pointers

@@ -33,7 +33,14 @@
     <div class="panel" data-viz-root>
   <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
   <div class="panel-body viz-stage">
-    <div class="viz-example">strs = [&quot;eat&quot;,&quot;tea&quot;,&quot;tan&quot;,&quot;ate&quot;,&quot;nat&quot;,&quot;bat&quot;]</div>
+    <div class="input-form">
+      <div class="input-field">
+      <label for="field-strs">strs</label>
+      <input type="text" id="field-strs" value="eat, tea, tan, ate, nat, bat" />
+    </div>
+      <button class="run-btn" data-viz-run>Visualize</button>
+    </div>
+    <div class="input-error" data-viz-error hidden></div>
     <div data-viz-rows></div>
     <div data-viz-map-block>
       <div class="row-label" data-viz-map-label></div>
@@ -54,8 +61,66 @@
     </div>
   </div>
 </div>
-<script>window.STEPS = [{"line": 6, "narration": "Start with an empty map from sorted-letters key \u2192 list of words.", "rows": [{"label": "strs", "items": [{"v": "eat", "state": "pending"}, {"v": "tea", "state": "pending"}, {"v": "tan", "state": "pending"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}], "map": {"label": "groups (key \u2192 words)", "items": []}}, {"line": 8, "narration": "'eat' sorted \u2192 'aet'.", "rows": [{"label": "strs", "items": [{"v": "eat", "state": "current"}, {"v": "tea", "state": "pending"}, {"v": "tan", "state": "pending"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}], "map": {"label": "groups (key \u2192 words)", "items": []}}, {"line": 9, "narration": "Add 'eat' under key 'aet'.", "rows": [{"label": "strs", "items": [{"v": "eat", "state": "done"}, {"v": "tea", "state": "pending"}, {"v": "tan", "state": "pending"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}], "map": {"label": "groups (key \u2192 words)", "items": [{"v": "aet: [eat]", "added": true}]}}, {"line": 8, "narration": "'tea' sorted \u2192 'aet' too \u2014 same key as 'eat'.", "rows": [{"label": "strs", "items": [{"v": "eat", "state": "done"}, {"v": "tea", "state": "current"}, {"v": "tan", "state": "pending"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}], "map": {"label": "groups (key \u2192 words)", "items": [{"v": "aet: [eat]"}]}}, {"line": 9, "narration": "Append 'tea' to the 'aet' group.", "rows": [{"label": "strs", "items": [{"v": "eat", "state": "done"}, {"v": "tea", "state": "done"}, {"v": "tan", "state": "pending"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}], "map": {"label": "groups (key \u2192 words)", "items": [{"v": "aet: [eat, tea]", "added": true}]}}, {"line": 8, "narration": "'tan' sorted \u2192 'ant' \u2014 a brand new key.", "rows": [{"label": "strs", "items": [{"v": "eat", "state": "done"}, {"v": "tea", "state": "done"}, {"v": "tan", "state": "current"}, {"v": "ate", "state": "pending"}, {"v": "nat", "state": "pending"}, {"v": "bat", "state": "pending"}]}], "map": {"label": "groups (key \u2192 words)", "items": [{"v": "aet: [eat, tea]"}]}}, {"line": 9, "narration": "Continue the same way: 'ate'\u2192aet (joins eat/tea), 'nat'\u2192ant (joins tan), 'bat'\u2192abt (new group).", "rows": [{"label": "strs", "items": [{"v": "eat", "state": "done"}, {"v": "tea", "state": "done"}, {"v": "tan", "state": "done"}, {"v": "ate", "state": "done"}, {"v": "nat", "state": "done"}, {"v": "bat", "state": "done"}]}], "map": {"label": "groups (key \u2192 words)", "items": [{"v": "aet: [eat, tea, ate]", "added": true}, {"v": "ant: [tan, nat]", "added": true}, {"v": "abt: [bat]", "added": true}]}}, {"line": 10, "narration": "<b>Return the grouped lists</b> \u2014 each group is a full set of anagrams.", "rows": [{"label": "strs", "items": [{"v": "eat", "state": "hit"}, {"v": "tea", "state": "hit"}, {"v": "tan", "state": "hit"}, {"v": "ate", "state": "hit"}, {"v": "nat", "state": "hit"}, {"v": "bat", "state": "hit"}]}], "map": {"label": "groups (key \u2192 words)", "items": [{"v": "aet: [eat, tea, ate]"}, {"v": "ant: [tan, nat]"}, {"v": "abt: [bat]"}]}}];</script>
+<script>
+window.INPUT_SCHEMA = [{"name": "strs", "label": "strs", "type": "string-array", "default": "eat, tea, tan, ate, nat, bat", "maxLen": 12}];
+function generateSteps(strs) {
+  var steps = [];
+  var groups = {};
+  var order = [];
+
+  function groupItems(highlightKey) {
+    return order.map(function (k) {
+      return { v: k + ": [" + groups[k].join(", ") + "]", added: k === highlightKey };
+    });
+  }
+
+  steps.push({
+    line: 6,
+    narration: "Start with an empty map from sorted-letters key → list of words.",
+    rows: [{ label: "strs", items: strs.map(function (w) { return { v: w, state: "pending" }; }) }],
+    map: { label: "groups (key → words)", items: [] }
+  });
+
+  for (var i = 0; i < strs.length; i++) {
+    var w = strs[i];
+    var key = w.split("").sort().join("");
+
+    steps.push({
+      line: 8,
+      narration: "'" + w + "' sorted → '" + key + "'.",
+      rows: [{ label: "strs", items: strs.map(function (v, idx) {
+        return { v: v, state: idx < i ? "done" : idx === i ? "current" : "pending" };
+      }) }],
+      map: { label: "groups (key → words)", items: groupItems(null) }
+    });
+
+    if (!Object.prototype.hasOwnProperty.call(groups, key)) {
+      groups[key] = [];
+      order.push(key);
+    }
+    groups[key].push(w);
+
+    steps.push({
+      line: 9,
+      narration: "Add '" + w + "' under key '" + key + "'.",
+      rows: [{ label: "strs", items: strs.map(function (v, idx) {
+        return { v: v, state: idx <= i ? "done" : "pending" };
+      }) }],
+      map: { label: "groups (key → words)", items: groupItems(key) }
+    });
+  }
+
+  steps.push({
+    line: 10,
+    narration: "<b>Return the grouped lists</b> — each group is a full set of anagrams.",
+    rows: [{ label: "strs", items: strs.map(function (v) { return { v: v, state: "hit" }; }) }],
+    map: { label: "groups (key → words)", items: groupItems(null) }
+  });
+  return steps;
+}
+</script>
 <script src="../shared/viz.js"></script>
+<script>window.initVizForm();</script>
 
   </div>
 </div>

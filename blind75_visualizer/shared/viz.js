@@ -1,9 +1,12 @@
-/* Blind 75 Visualizer — step player
-   Consumes a page-local `STEPS` array (defined inline on animated problem
-   pages) and drives the code highlight + row/map panels. No fetch, no
-   build step at runtime — everything needed is already in the page.
+/* Blind 75 Visualizer — step player + live input driver
+   Each animated problem page defines:
+     window.INPUT_SCHEMA = [{name, label, type, default, maxLen}, ...]
+     window.generateSteps = function(arg1, arg2, ...) { ...; return steps; }
+   then calls window.initVizForm() once both are defined and viz.js is
+   loaded. Steps are computed live in the browser from whatever the user
+   types in — nothing is fetched, nothing runs server-side.
 
-   STEPS[i] shape:
+   step shape:
    {
      line: <source line to highlight>,
      narration: "<html-safe string>",
@@ -95,6 +98,13 @@
     this.render();
   }
 
+  StepPlayer.prototype.setSteps = function (steps) {
+    this.pause();
+    this.steps = steps;
+    this.i = 0;
+    this.render();
+  };
+
   StepPlayer.prototype.go = function (idx) {
     if (idx < 0) return;
     if (idx >= this.steps.length) { this.pause(); return; }
@@ -149,10 +159,82 @@
 
   window.StepPlayer = StepPlayer;
 
-  document.addEventListener("DOMContentLoaded", function () {
-    if (window.STEPS && window.STEPS.length) {
-      var root = document.querySelector("[data-viz-root]");
-      if (root) window.__player = new StepPlayer(root, window.STEPS);
+  /* ---------- input parsing (used by generated per-page driver code) ---------- */
+
+  window.VizInput = {
+    "int-array": function (raw, maxLen) {
+      maxLen = maxLen || 30;
+      var parts = raw.split(",").map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 0; });
+      if (parts.length === 0) throw new Error("Enter at least one number.");
+      if (parts.length > maxLen) throw new Error("Keep it to " + maxLen + " numbers or fewer for a readable animation.");
+      return parts.map(function (s) {
+        if (!/^-?\d+$/.test(s)) throw new Error('"' + s + '" is not a valid integer.');
+        return parseInt(s, 10);
+      });
+    },
+    "string-array": function (raw, maxLen) {
+      maxLen = maxLen || 12;
+      var parts = raw.split(",").map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 0; });
+      if (parts.length === 0) throw new Error("Enter at least one word.");
+      if (parts.length > maxLen) throw new Error("Keep it to " + maxLen + " words or fewer for a readable animation.");
+      return parts;
+    },
+    "int": function (raw) {
+      var s = raw.trim();
+      if (!/^-?\d+$/.test(s)) throw new Error('"' + raw + '" is not a valid integer.');
+      return parseInt(s, 10);
+    },
+    "string": function (raw, maxLen) {
+      maxLen = maxLen || 40;
+      if (raw.length === 0) throw new Error("This field can't be empty.");
+      if (raw.length > maxLen) throw new Error("Keep it to " + maxLen + " characters or fewer for a readable animation.");
+      return raw;
     }
-  });
+  };
+
+  /* ---------- generic form driver ----------
+     Wires an input form + "Visualize" button to a page-local
+     generateSteps(...) function, given window.INPUT_SCHEMA. */
+
+  window.initVizForm = function () {
+    var schema = window.INPUT_SCHEMA || [];
+    var root = document.querySelector("[data-viz-root]");
+    if (!root || !window.generateSteps) return;
+    var errorEl = root.querySelector("[data-viz-error]");
+    var player = null;
+
+    function readArgs() {
+      return schema.map(function (field) {
+        var input = document.getElementById("field-" + field.name);
+        return window.VizInput[field.type](input.value, field.maxLen);
+      });
+    }
+
+    function run() {
+      try {
+        var args = readArgs();
+        var steps = window.generateSteps.apply(null, args);
+        if (!steps || !steps.length) throw new Error("No steps produced — try different input.");
+        if (errorEl) { errorEl.hidden = true; errorEl.textContent = ""; }
+        if (!player) player = new StepPlayer(root, steps);
+        else player.setSteps(steps);
+        window.__player = player;
+      } catch (e) {
+        if (errorEl) { errorEl.hidden = false; errorEl.textContent = e.message; }
+      }
+    }
+
+    var btn = root.querySelector("[data-viz-run]");
+    if (btn) btn.addEventListener("click", run);
+    schema.forEach(function (field) {
+      var input = document.getElementById("field-" + field.name);
+      if (input) {
+        input.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") run();
+        });
+      }
+    });
+
+    run();
+  };
 })();

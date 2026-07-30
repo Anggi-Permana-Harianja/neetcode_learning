@@ -144,7 +144,7 @@ def topbar(depth: int) -> str:
 
 def render_index() -> str:
     total = len(PROBLEMS)
-    animated = sum(1 for p in PROBLEMS if p.get("steps"))
+    animated = sum(1 for p in PROBLEMS if p.get("js"))
     by_cat: dict[str, list[dict]] = {c["key"]: [] for c in CATEGORIES}
     for p in PROBLEMS:
         by_cat.setdefault(p["category"], []).append(p)
@@ -160,7 +160,7 @@ def render_index() -> str:
             continue
         cards = []
         for p in items:
-            viz = '<span class="viz-tag">Animated</span>' if p.get("steps") else '<span class="static-tag">Walkthrough</span>'
+            viz = '<span class="viz-tag">Animated</span>' if p.get("js") else '<span class="static-tag">Walkthrough</span>'
             num = f'<span class="problem-number">#{p["number"]}</span>' if p.get("number") else ""
             cards.append(f"""<a class="problem-card" href="problems/{p['slug']}.html">
   <div class="problem-card-top">
@@ -199,13 +199,23 @@ def render_index() -> str:
 
 
 def render_viz_panel(problem: dict) -> str:
-    steps = problem["steps"]
-    step0 = steps[0]
-    row_labels = [r["label"] for r in step0["rows"]]
+    inputs = problem["inputs"]
+    fields_html = "".join(
+        f'''<div class="input-field">
+      <label for="field-{f['name']}">{html.escape(f['label'])}</label>
+      <input type="text" id="field-{f['name']}" value="{html.escape(str(f['default']))}" />
+    </div>'''
+        for f in inputs
+    )
+    schema_json = json.dumps(inputs)
     return f"""<div class="panel" data-viz-root>
   <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
   <div class="panel-body viz-stage">
-    <div class="viz-example">{html.escape(problem.get('example', ''))}</div>
+    <div class="input-form">
+      {fields_html}
+      <button class="run-btn" data-viz-run>Visualize</button>
+    </div>
+    <div class="input-error" data-viz-error hidden></div>
     <div data-viz-rows></div>
     <div data-viz-map-block>
       <div class="row-label" data-viz-map-label></div>
@@ -226,8 +236,12 @@ def render_viz_panel(problem: dict) -> str:
     </div>
   </div>
 </div>
-<script>window.STEPS = {json.dumps(steps)};</script>
+<script>
+window.INPUT_SCHEMA = {schema_json};
+{problem['js']}
+</script>
 <script src="../shared/viz.js"></script>
+<script>window.initVizForm();</script>
 """
 
 
@@ -246,7 +260,7 @@ def render_static_panel(problem: dict) -> str:
 
 
 def render_problem(problem: dict) -> str:
-    animated = bool(problem.get("steps"))
+    animated = bool(problem.get("js"))
     code_html = code_block_html(problem["code"])
     tags = "".join(f'<span class="tag-chip">{html.escape(t)}</span>' for t in problem.get("tags", []))
     num = f'LeetCode #{problem["number"]} · ' if problem.get("number") else ""
