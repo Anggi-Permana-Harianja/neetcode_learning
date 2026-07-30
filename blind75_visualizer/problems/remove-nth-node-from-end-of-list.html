@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Remove Nth Node From End of List · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Linked List</div>
+  <div class="problem-header">
+    <h1>Remove Nth Node From End of List</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Linked List</span><span class="tag-chip">Two Pointers</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #19 · Remove the nth node from the end of the list in one pass.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> Optional</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> ListNode:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">__init__</span>(self, val=<span class="num">0</span>, next=<span class="kw">None</span>):</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        self.val = val</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        self.next = next</span><span class="code-line" data-code-line="7"><span class="ln">7</span>&nbsp;</span><span class="code-line" data-code-line="8"><span class="ln">8</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="9"><span class="ln">9</span>    <span class="kw">def</span> <span class="fn">removeNthFromEnd</span>(self, head: Optional[ListNode], n: <span class="bi">int</span>) -&gt; Optional[ListNode]:</span><span class="code-line" data-code-line="10"><span class="ln">10</span>        dummy = <span class="fn">ListNode</span>(<span class="num">0</span>, head)</span><span class="code-line" data-code-line="11"><span class="ln">11</span>        fast = slow = dummy</span><span class="code-line" data-code-line="12"><span class="ln">12</span>        <span class="kw">for</span> _ <span class="kw">in</span> <span class="bi">range</span>(n):</span><span class="code-line" data-code-line="13"><span class="ln">13</span>            fast = fast.next</span><span class="code-line" data-code-line="14"><span class="ln">14</span>        <span class="kw">while</span> fast.next:</span><span class="code-line" data-code-line="15"><span class="ln">15</span>            fast = fast.next</span><span class="code-line" data-code-line="16"><span class="ln">16</span>            slow = slow.next</span><span class="code-line" data-code-line="17"><span class="ln">17</span>        slow.next = slow.next.next</span><span class="code-line" data-code-line="18"><span class="ln">18</span>        <span class="kw">return</span> dummy.next</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">1→2→3→4→5, n = 2  →  1→2→3→5</div>
+    <ol class="approach-list"><li>Use a dummy node before head so removing the actual head is handled uniformly.</li><li>Advance a fast pointer n steps ahead of a slow pointer.</li><li>Move both pointers together until fast reaches the last node.</li><li>slow is now just before the node to remove — unlink it with slow.next = slow.next.next.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

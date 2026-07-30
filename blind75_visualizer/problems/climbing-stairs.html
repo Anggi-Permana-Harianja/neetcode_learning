@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Climbing Stairs · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / 1-D Dynamic Programming</div>
+  <div class="problem-header">
+    <h1>Climbing Stairs</h1>
+    <div class="problem-meta">
+      <span class="badge badge-easy">Easy</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">DP</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #70 · Count distinct ways to climb n stairs, taking 1 or 2 steps at a time.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="2"><span class="ln">2</span>    <span class="kw">def</span> <span class="fn">climbStairs</span>(self, n: <span class="bi">int</span>) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="3"><span class="ln">3</span>        <span class="kw">if</span> n &lt;= <span class="num">2</span>:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>            <span class="kw">return</span> n</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        prev, curr = <span class="num">1</span>, <span class="num">2</span></span><span class="code-line" data-code-line="6"><span class="ln">6</span>        <span class="kw">for</span> _ <span class="kw">in</span> <span class="bi">range</span>(<span class="num">3</span>, n + <span class="num">1</span>):</span><span class="code-line" data-code-line="7"><span class="ln">7</span>            prev, curr = curr, prev + curr</span><span class="code-line" data-code-line="8"><span class="ln">8</span>        <span class="kw">return</span> curr</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">n = 5  →  8</div>
+    <ol class="approach-list"><li>The number of ways to reach step n is ways(n-1) + ways(n-2) — you arrive either from one step back or two steps back. This is Fibonacci.</li><li>Base cases: 1 way to reach step 1, 2 ways to reach step 2.</li><li>Iterate up from step 3, keeping only the last two values instead of a full array.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

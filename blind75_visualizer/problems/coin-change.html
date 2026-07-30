@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coin Change · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / 1-D Dynamic Programming</div>
+  <div class="problem-header">
+    <h1>Coin Change</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">DP</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #322 · Find the fewest coins needed to make up a given amount (or -1 if impossible).</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(amount · number of coin types) time · O(amount) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">coinChange</span>(self, coins: List[<span class="bi">int</span>], amount: <span class="bi">int</span>) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        dp = [<span class="num">0</span>] + [<span class="bi">float</span>(<span class="str">&quot;inf&quot;</span>)] * amount</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        <span class="kw">for</span> a <span class="kw">in</span> <span class="bi">range</span>(<span class="num">1</span>, amount + <span class="num">1</span>):</span><span class="code-line" data-code-line="7"><span class="ln">7</span>            <span class="kw">for</span> coin <span class="kw">in</span> coins:</span><span class="code-line" data-code-line="8"><span class="ln">8</span>                <span class="kw">if</span> coin &lt;= a:</span><span class="code-line" data-code-line="9"><span class="ln">9</span>                    dp[a] = <span class="bi">min</span>(dp[a], dp[a - coin] + <span class="num">1</span>)</span><span class="code-line" data-code-line="10"><span class="ln">10</span>        <span class="kw">return</span> dp[amount] <span class="kw">if</span> dp[amount] != <span class="bi">float</span>(<span class="str">&quot;inf&quot;</span>) <span class="kw">else</span> -<span class="num">1</span></span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(amount · number of coin types)</b></span>
+    <span>Space <b>O(amount)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">coins = [1,2,5], amount = 11  →  3  (5+5+1)</div>
+    <ol class="approach-list"><li>Bottom-up DP: dp[a] = fewest coins to make amount a, with dp[0] = 0.</li><li>For every amount from 1 up to the target, try every coin: if the coin fits, dp[a] = min(dp[a], dp[a - coin] + 1).</li><li>Initialize all dp values (besides 0) to infinity so unreachable amounts stay unreachable.</li><li>If dp[amount] is still infinity at the end, it&#x27;s impossible — return -1.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

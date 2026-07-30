@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jump Game · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / 1-D Dynamic Programming</div>
+  <div class="problem-header">
+    <h1>Jump Game</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">DP</span><span class="tag-chip">Greedy</span><span class="tag-chip">Array</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #55 · Determine if you can reach the last index, where nums[i] is the max jump length from i.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">canJump</span>(self, nums: List[<span class="bi">int</span>]) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        goal = <span class="bi">len</span>(nums) - <span class="num">1</span></span><span class="code-line" data-code-line="6"><span class="ln">6</span>        <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="bi">len</span>(nums) - <span class="num">2</span>, -<span class="num">1</span>, -<span class="num">1</span>):</span><span class="code-line" data-code-line="7"><span class="ln">7</span>            <span class="kw">if</span> i + nums[i] &gt;= goal:</span><span class="code-line" data-code-line="8"><span class="ln">8</span>                goal = i</span><span class="code-line" data-code-line="9"><span class="ln">9</span>        <span class="kw">return</span> goal == <span class="num">0</span></span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">nums = [2,3,1,1,4]  →  True</div>
+    <ol class="approach-list"><li>Work backward from the last index, tracking the leftmost index (&#x27;goal&#x27;) known to be able to reach the end.</li><li>For each index i (right to left), if i + nums[i] can reach the current goal, then i itself becomes the new, closer goal.</li><li>If the goal is pulled all the way back to index 0, the start can reach the end.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

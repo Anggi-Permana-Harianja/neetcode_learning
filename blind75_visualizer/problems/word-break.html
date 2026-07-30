@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Word Break · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / 1-D Dynamic Programming</div>
+  <div class="problem-header">
+    <h1>Word Break</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">DP</span><span class="tag-chip">String</span><span class="tag-chip">Hash Set</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #139 · Check if a string can be segmented into words from a given dictionary.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n²) time · O(n) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">wordBreak</span>(self, s: <span class="bi">str</span>, wordDict: List[<span class="bi">str</span>]) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        words = <span class="bi">set</span>(wordDict)</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        n = <span class="bi">len</span>(s)</span><span class="code-line" data-code-line="7"><span class="ln">7</span>        dp = [<span class="kw">False</span>] * (n + <span class="num">1</span>)</span><span class="code-line" data-code-line="8"><span class="ln">8</span>        dp[<span class="num">0</span>] = <span class="kw">True</span></span><span class="code-line" data-code-line="9"><span class="ln">9</span>        <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="num">1</span>, n + <span class="num">1</span>):</span><span class="code-line" data-code-line="10"><span class="ln">10</span>            <span class="kw">for</span> j <span class="kw">in</span> <span class="bi">range</span>(i):</span><span class="code-line" data-code-line="11"><span class="ln">11</span>                <span class="kw">if</span> dp[j] <span class="kw">and</span> s[j:i] <span class="kw">in</span> words:</span><span class="code-line" data-code-line="12"><span class="ln">12</span>                    dp[i] = <span class="kw">True</span></span><span class="code-line" data-code-line="13"><span class="ln">13</span>                    <span class="kw">break</span></span><span class="code-line" data-code-line="14"><span class="ln">14</span>        <span class="kw">return</span> dp[n]</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n²)</b></span>
+    <span>Space <b>O(n)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">s = &quot;leetcode&quot;, wordDict = [&quot;leet&quot;,&quot;code&quot;]  →  True</div>
+    <ol class="approach-list"><li>dp[i] = True if s[:i] can be fully segmented using dictionary words.</li><li>dp[0] = True (empty prefix trivially segments).</li><li>For each end position i, try every split point j &lt; i: if dp[j] is True and s[j:i] is a dictionary word, then dp[i] is True.</li><li>A set for the dictionary makes each substring check O(1) average.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

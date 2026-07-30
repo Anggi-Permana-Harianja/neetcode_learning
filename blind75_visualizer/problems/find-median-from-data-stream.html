@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Find Median from Data Stream · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Heap / Priority Queue</div>
+  <div class="problem-header">
+    <h1>Find Median from Data Stream</h1>
+    <div class="problem-meta">
+      <span class="badge badge-hard">Hard</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Heap</span><span class="tag-chip">Design</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #295 · Support adding numbers one at a time and querying the running median.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(log n) add, O(1) query time · O(n) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">import</span> heapq</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> MedianFinder:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">__init__</span>(self):</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        self.small = []  <span class="cm"># max-heap (negated)</span></span><span class="code-line" data-code-line="6"><span class="ln">6</span>        self.large = []  <span class="cm"># min-heap</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>&nbsp;</span><span class="code-line" data-code-line="8"><span class="ln">8</span>    <span class="kw">def</span> <span class="fn">addNum</span>(self, num: <span class="bi">int</span>) -&gt; <span class="kw">None</span>:</span><span class="code-line" data-code-line="9"><span class="ln">9</span>        heapq.<span class="fn">heappush</span>(self.small, -num)</span><span class="code-line" data-code-line="10"><span class="ln">10</span>        heapq.<span class="fn">heappush</span>(self.large, -heapq.<span class="fn">heappop</span>(self.small))</span><span class="code-line" data-code-line="11"><span class="ln">11</span>        <span class="kw">if</span> <span class="bi">len</span>(self.large) &gt; <span class="bi">len</span>(self.small):</span><span class="code-line" data-code-line="12"><span class="ln">12</span>            heapq.<span class="fn">heappush</span>(self.small, -heapq.<span class="fn">heappop</span>(self.large))</span><span class="code-line" data-code-line="13"><span class="ln">13</span>&nbsp;</span><span class="code-line" data-code-line="14"><span class="ln">14</span>    <span class="kw">def</span> <span class="fn">findMedian</span>(self) -&gt; <span class="bi">float</span>:</span><span class="code-line" data-code-line="15"><span class="ln">15</span>        <span class="kw">if</span> <span class="bi">len</span>(self.small) &gt; <span class="bi">len</span>(self.large):</span><span class="code-line" data-code-line="16"><span class="ln">16</span>            <span class="kw">return</span> -self.small[<span class="num">0</span>]</span><span class="code-line" data-code-line="17"><span class="ln">17</span>        <span class="kw">return</span> (-self.small[<span class="num">0</span>] + self.large[<span class="num">0</span>]) / <span class="num">2</span></span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(log n) add, O(1) query</b></span>
+    <span>Space <b>O(n)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">addNum(1), addNum(2) → median 1.5; addNum(3) → median 2</div>
+    <ol class="approach-list"><li>Split numbers across two heaps: &#x27;small&#x27; (max-heap, via negation) for the lower half, &#x27;large&#x27; (min-heap) for the upper half.</li><li>Always push into small first, then move its top into large to keep values properly partitioned.</li><li>Rebalance so small never has more than one extra element compared to large.</li><li>If small has one more element, it holds the median; otherwise average the two tops.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

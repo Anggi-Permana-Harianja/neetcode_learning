@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Graph Valid Tree · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Graphs</div>
+  <div class="problem-header">
+    <h1>Graph Valid Tree</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Graph</span><span class="tag-chip">Union-Find</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #261 · Check whether n nodes and a list of edges form a valid tree.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(E · α(n)) time · O(n) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">validTree</span>(self, n: <span class="bi">int</span>, edges: List[List[<span class="bi">int</span>]]) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        <span class="kw">if</span> <span class="bi">len</span>(edges) != n - <span class="num">1</span>:</span><span class="code-line" data-code-line="6"><span class="ln">6</span>            <span class="kw">return</span> <span class="kw">False</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>        parent = <span class="bi">list</span>(<span class="bi">range</span>(n))</span><span class="code-line" data-code-line="8"><span class="ln">8</span>&nbsp;</span><span class="code-line" data-code-line="9"><span class="ln">9</span>        <span class="kw">def</span> <span class="fn">find</span>(x: <span class="bi">int</span>) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="10"><span class="ln">10</span>            <span class="kw">while</span> parent[x] != x:</span><span class="code-line" data-code-line="11"><span class="ln">11</span>                parent[x] = parent[parent[x]]</span><span class="code-line" data-code-line="12"><span class="ln">12</span>                x = parent[x]</span><span class="code-line" data-code-line="13"><span class="ln">13</span>            <span class="kw">return</span> x</span><span class="code-line" data-code-line="14"><span class="ln">14</span>&nbsp;</span><span class="code-line" data-code-line="15"><span class="ln">15</span>        <span class="kw">def</span> <span class="fn">union</span>(a: <span class="bi">int</span>, b: <span class="bi">int</span>) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="16"><span class="ln">16</span>            ra, rb = <span class="fn">find</span>(a), <span class="fn">find</span>(b)</span><span class="code-line" data-code-line="17"><span class="ln">17</span>            <span class="kw">if</span> ra == rb:</span><span class="code-line" data-code-line="18"><span class="ln">18</span>                <span class="kw">return</span> <span class="kw">False</span></span><span class="code-line" data-code-line="19"><span class="ln">19</span>            parent[ra] = rb</span><span class="code-line" data-code-line="20"><span class="ln">20</span>            <span class="kw">return</span> <span class="kw">True</span></span><span class="code-line" data-code-line="21"><span class="ln">21</span>&nbsp;</span><span class="code-line" data-code-line="22"><span class="ln">22</span>        <span class="kw">return</span> <span class="bi">all</span>(<span class="fn">union</span>(a, b) <span class="kw">for</span> a, b <span class="kw">in</span> edges)</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(E · α(n))</b></span>
+    <span>Space <b>O(n)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]  →  True</div>
+    <ol class="approach-list"><li>A valid tree on n nodes must have exactly n - 1 edges — check that first as a cheap filter.</li><li>With exactly n - 1 edges, the graph is a tree iff it&#x27;s fully connected with no cycles.</li><li>Union-Find each edge: if two endpoints are already connected, adding this edge creates a cycle — not a tree.</li><li>If every union succeeds (no cycle found) and the edge count matched, it&#x27;s a valid tree.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

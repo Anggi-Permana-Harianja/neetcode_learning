@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sum of Two Integers · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Bit Manipulation</div>
+  <div class="problem-header">
+    <h1>Sum of Two Integers</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Bit Manipulation</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #371 · Add two integers without using the + or - operators.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(1) — bounded by 32 bits time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="2"><span class="ln">2</span>    <span class="kw">def</span> <span class="fn">getSum</span>(self, a: <span class="bi">int</span>, b: <span class="bi">int</span>) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="3"><span class="ln">3</span>        mask = <span class="num">0xFFFFFFFF</span></span><span class="code-line" data-code-line="4"><span class="ln">4</span>        <span class="kw">while</span> b &amp; mask:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>            a, b = a ^ b, (a &amp; b) &lt;&lt; <span class="num">1</span></span><span class="code-line" data-code-line="6"><span class="ln">6</span>        result = (a ^ b) &amp; mask</span><span class="code-line" data-code-line="7"><span class="ln">7</span>        <span class="kw">return</span> result <span class="kw">if</span> result &lt;= <span class="num">0x7FFFFFFF</span> <span class="kw">else</span> ~(result ^ mask)</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(1) — bounded by 32 bits</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">a = 1, b = 2  →  3</div>
+    <ol class="approach-list"><li>XOR (a ^ b) adds bits without carrying; AND (a &amp; b) shifted left by 1 gives exactly the carry bits.</li><li>Repeat &#x27;sum, carry = a^b, (a&amp;b)&lt;&lt;1&#x27; until there&#x27;s no carry left — this is how binary adders work.</li><li>A mask limits everything to 32 bits, since Python integers don&#x27;t naturally overflow like C integers.</li><li>Convert back from the 32-bit unsigned representation to a signed Python int at the end.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

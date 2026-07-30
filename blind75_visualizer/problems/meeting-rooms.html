@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meeting Rooms · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Intervals</div>
+  <div class="problem-header">
+    <h1>Meeting Rooms</h1>
+    <div class="problem-meta">
+      <span class="badge badge-easy">Easy</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Array</span><span class="tag-chip">Intervals</span><span class="tag-chip">Sorting</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #252 · Determine if a person could attend every meeting (no time overlaps).</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n log n) time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">canAttendMeetings</span>(self, intervals: List[List[<span class="bi">int</span>]]) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        intervals.<span class="fn">sort</span>(key=<span class="kw">lambda</span> pair: pair[<span class="num">0</span>])</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="num">1</span>, <span class="bi">len</span>(intervals)):</span><span class="code-line" data-code-line="7"><span class="ln">7</span>            <span class="kw">if</span> intervals[i][<span class="num">0</span>] &lt; intervals[i - <span class="num">1</span>][<span class="num">1</span>]:</span><span class="code-line" data-code-line="8"><span class="ln">8</span>                <span class="kw">return</span> <span class="kw">False</span></span><span class="code-line" data-code-line="9"><span class="ln">9</span>        <span class="kw">return</span> <span class="kw">True</span></span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n log n)</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">intervals = [[0,30],[5,10],[15,20]]  →  False</div>
+    <ol class="approach-list"><li>Sort meetings by start time.</li><li>Walk through consecutive pairs: if a meeting starts before the previous one ends, they overlap.</li><li>Any single overlap means the person can&#x27;t attend all meetings.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

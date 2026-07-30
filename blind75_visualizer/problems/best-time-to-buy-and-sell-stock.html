@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Best Time to Buy and Sell Stock · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Sliding Window</div>
+  <div class="problem-header">
+    <h1>Best Time to Buy and Sell Stock</h1>
+    <div class="problem-meta">
+      <span class="badge badge-easy">Easy</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Array</span><span class="tag-chip">Sliding Window</span><span class="tag-chip">DP</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #121 · Maximize profit from one buy and one later sell.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">maxProfit</span>(self, prices: List[<span class="bi">int</span>]) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        min_price = <span class="bi">float</span>(<span class="str">&quot;inf&quot;</span>)</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        best = <span class="num">0</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>        <span class="kw">for</span> price <span class="kw">in</span> prices:</span><span class="code-line" data-code-line="8"><span class="ln">8</span>            min_price = <span class="bi">min</span>(min_price, price)</span><span class="code-line" data-code-line="9"><span class="ln">9</span>            best = <span class="bi">max</span>(best, price - min_price)</span><span class="code-line" data-code-line="10"><span class="ln">10</span>        <span class="kw">return</span> best</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">prices = [7,1,5,3,6,4]  →  5  (buy at 1, sell at 6)</div>
+    <ol class="approach-list"><li>Track the lowest price seen so far while scanning left to right.</li><li>At each price, compute the profit if sold today (price - min_price).</li><li>Keep the best profit seen; update the running minimum as you go.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

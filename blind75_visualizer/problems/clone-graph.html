@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clone Graph · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Graphs</div>
+  <div class="problem-header">
+    <h1>Clone Graph</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Graph</span><span class="tag-chip">DFS</span><span class="tag-chip">Hash Map</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #133 · Deep-copy a connected undirected graph given a reference node.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(V + E) time · O(V) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> Optional</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Node:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">__init__</span>(self, val=<span class="num">0</span>, neighbors=<span class="kw">None</span>):</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        self.val = val</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        self.neighbors = neighbors <span class="kw">or</span> []</span><span class="code-line" data-code-line="7"><span class="ln">7</span>&nbsp;</span><span class="code-line" data-code-line="8"><span class="ln">8</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="9"><span class="ln">9</span>    <span class="kw">def</span> <span class="fn">cloneGraph</span>(self, node: Optional[<span class="str">&quot;Node&quot;</span>]) -&gt; Optional[<span class="str">&quot;Node&quot;</span>]:</span><span class="code-line" data-code-line="10"><span class="ln">10</span>        <span class="kw">if</span> <span class="kw">not</span> node:</span><span class="code-line" data-code-line="11"><span class="ln">11</span>            <span class="kw">return</span> <span class="kw">None</span></span><span class="code-line" data-code-line="12"><span class="ln">12</span>        clones = {}</span><span class="code-line" data-code-line="13"><span class="ln">13</span>&nbsp;</span><span class="code-line" data-code-line="14"><span class="ln">14</span>        <span class="kw">def</span> <span class="fn">dfs</span>(n):</span><span class="code-line" data-code-line="15"><span class="ln">15</span>            <span class="kw">if</span> n <span class="kw">in</span> clones:</span><span class="code-line" data-code-line="16"><span class="ln">16</span>                <span class="kw">return</span> clones[n]</span><span class="code-line" data-code-line="17"><span class="ln">17</span>            copy = <span class="fn">Node</span>(n.val)</span><span class="code-line" data-code-line="18"><span class="ln">18</span>            clones[n] = copy</span><span class="code-line" data-code-line="19"><span class="ln">19</span>            <span class="kw">for</span> neighbor <span class="kw">in</span> n.neighbors:</span><span class="code-line" data-code-line="20"><span class="ln">20</span>                copy.neighbors.<span class="fn">append</span>(<span class="fn">dfs</span>(neighbor))</span><span class="code-line" data-code-line="21"><span class="ln">21</span>            <span class="kw">return</span> copy</span><span class="code-line" data-code-line="22"><span class="ln">22</span>&nbsp;</span><span class="code-line" data-code-line="23"><span class="ln">23</span>        <span class="kw">return</span> <span class="fn">dfs</span>(node)</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(V + E)</b></span>
+    <span>Space <b>O(V)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">adjList = [[2,4],[1,3],[2,4],[1,3]]  →  identical structure, new nodes</div>
+    <ol class="approach-list"><li>Keep a map from original node → its clone, so each node is only cloned once (handles cycles).</li><li>DFS from the given node: if already cloned, return the existing clone.</li><li>Otherwise create a clone, register it in the map immediately (before recursing) to break cycles, then recursively clone and attach each neighbor.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

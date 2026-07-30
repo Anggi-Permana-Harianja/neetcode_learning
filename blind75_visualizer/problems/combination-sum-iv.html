@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Combination Sum IV · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / 1-D Dynamic Programming</div>
+  <div class="problem-header">
+    <h1>Combination Sum IV</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">DP</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #377 · Count the number of ordered sequences from nums that sum to target (order matters).</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(target · len(nums)) time · O(target) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">combinationSum4</span>(self, nums: List[<span class="bi">int</span>], target: <span class="bi">int</span>) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        dp = [<span class="num">1</span>] + [<span class="num">0</span>] * target</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        <span class="kw">for</span> t <span class="kw">in</span> <span class="bi">range</span>(<span class="num">1</span>, target + <span class="num">1</span>):</span><span class="code-line" data-code-line="7"><span class="ln">7</span>            <span class="kw">for</span> num <span class="kw">in</span> nums:</span><span class="code-line" data-code-line="8"><span class="ln">8</span>                <span class="kw">if</span> num &lt;= t:</span><span class="code-line" data-code-line="9"><span class="ln">9</span>                    dp[t] += dp[t - num]</span><span class="code-line" data-code-line="10"><span class="ln">10</span>        <span class="kw">return</span> dp[target]</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(target · len(nums))</b></span>
+    <span>Space <b>O(target)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">nums = [1,2,3], target = 4  →  7</div>
+    <ol class="approach-list"><li>Unlike Combination Sum, order matters here, so this is really a &#x27;count ways to climb to target using steps of size nums[i]&#x27; problem.</li><li>dp[t] = number of ways to reach exactly total t; dp[0] = 1 (one way: use nothing).</li><li>For each target t from 1 upward, sum dp[t - num] over every num that fits.</li><li>This naturally counts different orderings of the same numbers as distinct.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

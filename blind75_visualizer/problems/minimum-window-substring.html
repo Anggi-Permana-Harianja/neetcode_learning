@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Minimum Window Substring · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Sliding Window</div>
+  <div class="problem-header">
+    <h1>Minimum Window Substring</h1>
+    <div class="problem-meta">
+      <span class="badge badge-hard">Hard</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">String</span><span class="tag-chip">Sliding Window</span><span class="tag-chip">Hash Map</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #76 · Smallest substring of s containing every character of t (with multiplicity).</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n + m) time · O(charset) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> collections <span class="kw">import</span> Counter</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">minWindow</span>(self, s: <span class="bi">str</span>, t: <span class="bi">str</span>) -&gt; <span class="bi">str</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        <span class="kw">if</span> <span class="kw">not</span> t <span class="kw">or</span> <span class="kw">not</span> s:</span><span class="code-line" data-code-line="6"><span class="ln">6</span>            <span class="kw">return</span> <span class="str">&quot;&quot;</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>        need = <span class="fn">Counter</span>(t)</span><span class="code-line" data-code-line="8"><span class="ln">8</span>        missing = <span class="bi">len</span>(t)</span><span class="code-line" data-code-line="9"><span class="ln">9</span>        left = <span class="num">0</span></span><span class="code-line" data-code-line="10"><span class="ln">10</span>        best_left, best_right = <span class="num">0</span>, <span class="num">0</span></span><span class="code-line" data-code-line="11"><span class="ln">11</span>        best_len = <span class="bi">float</span>(<span class="str">&quot;inf&quot;</span>)</span><span class="code-line" data-code-line="12"><span class="ln">12</span>&nbsp;</span><span class="code-line" data-code-line="13"><span class="ln">13</span>        <span class="kw">for</span> right, ch <span class="kw">in</span> <span class="bi">enumerate</span>(s, <span class="num">1</span>):</span><span class="code-line" data-code-line="14"><span class="ln">14</span>            <span class="kw">if</span> need[ch] &gt; <span class="num">0</span>:</span><span class="code-line" data-code-line="15"><span class="ln">15</span>                missing -= <span class="num">1</span></span><span class="code-line" data-code-line="16"><span class="ln">16</span>            need[ch] -= <span class="num">1</span></span><span class="code-line" data-code-line="17"><span class="ln">17</span>&nbsp;</span><span class="code-line" data-code-line="18"><span class="ln">18</span>            <span class="kw">if</span> missing == <span class="num">0</span>:</span><span class="code-line" data-code-line="19"><span class="ln">19</span>                <span class="kw">while</span> left &lt; right <span class="kw">and</span> need[s[left]] &lt; <span class="num">0</span>:</span><span class="code-line" data-code-line="20"><span class="ln">20</span>                    need[s[left]] += <span class="num">1</span></span><span class="code-line" data-code-line="21"><span class="ln">21</span>                    left += <span class="num">1</span></span><span class="code-line" data-code-line="22"><span class="ln">22</span>                <span class="kw">if</span> right - left &lt; best_len:</span><span class="code-line" data-code-line="23"><span class="ln">23</span>                    best_len = right - left</span><span class="code-line" data-code-line="24"><span class="ln">24</span>                    best_left, best_right = left, right</span><span class="code-line" data-code-line="25"><span class="ln">25</span>&nbsp;</span><span class="code-line" data-code-line="26"><span class="ln">26</span>        <span class="kw">return</span> s[best_left:best_right] <span class="kw">if</span> best_len != <span class="bi">float</span>(<span class="str">&quot;inf&quot;</span>) <span class="kw">else</span> <span class="str">&quot;&quot;</span></span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n + m)</b></span>
+    <span>Space <b>O(charset)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">s = &quot;ADOBECODEBANC&quot;, t = &quot;ABC&quot;  →  &quot;BANC&quot;</div>
+    <ol class="approach-list"><li>Count required characters from t; track how many distinct required counts are still &#x27;missing&#x27;.</li><li>Expand the window&#x27;s right edge, decrementing need[ch] and reducing missing when a needed char is fully covered.</li><li>Once missing reaches 0, the window contains all of t — try to shrink from the left while it stays valid, recording the best window.</li><li>Continue expanding right until s is exhausted.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

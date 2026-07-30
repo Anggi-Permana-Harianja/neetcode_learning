@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Design Add and Search Words Data Structure · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Tries</div>
+  <div class="problem-header">
+    <h1>Design Add and Search Words Data Structure</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Trie</span><span class="tag-chip">DFS</span><span class="tag-chip">Design</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #211 · Support adding words and searching with &#x27;.&#x27; as a wildcard for any letter.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(m) typical, O(26^m) worst case with many wildcards time · O(total characters added) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">class</span> TrieNode:</span><span class="code-line" data-code-line="2"><span class="ln">2</span>    <span class="kw">def</span> <span class="fn">__init__</span>(self):</span><span class="code-line" data-code-line="3"><span class="ln">3</span>        self.children = {}</span><span class="code-line" data-code-line="4"><span class="ln">4</span>        self.end = <span class="kw">False</span></span><span class="code-line" data-code-line="5"><span class="ln">5</span>&nbsp;</span><span class="code-line" data-code-line="6"><span class="ln">6</span><span class="kw">class</span> WordDictionary:</span><span class="code-line" data-code-line="7"><span class="ln">7</span>    <span class="kw">def</span> <span class="fn">__init__</span>(self):</span><span class="code-line" data-code-line="8"><span class="ln">8</span>        self.root = <span class="fn">TrieNode</span>()</span><span class="code-line" data-code-line="9"><span class="ln">9</span>&nbsp;</span><span class="code-line" data-code-line="10"><span class="ln">10</span>    <span class="kw">def</span> <span class="fn">addWord</span>(self, word: <span class="bi">str</span>) -&gt; <span class="kw">None</span>:</span><span class="code-line" data-code-line="11"><span class="ln">11</span>        node = self.root</span><span class="code-line" data-code-line="12"><span class="ln">12</span>        <span class="kw">for</span> ch <span class="kw">in</span> word:</span><span class="code-line" data-code-line="13"><span class="ln">13</span>            node = node.children.<span class="fn">setdefault</span>(ch, <span class="fn">TrieNode</span>())</span><span class="code-line" data-code-line="14"><span class="ln">14</span>        node.end = <span class="kw">True</span></span><span class="code-line" data-code-line="15"><span class="ln">15</span>&nbsp;</span><span class="code-line" data-code-line="16"><span class="ln">16</span>    <span class="kw">def</span> <span class="fn">search</span>(self, word: <span class="bi">str</span>) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="17"><span class="ln">17</span>        <span class="kw">def</span> <span class="fn">dfs</span>(node: TrieNode, i: <span class="bi">int</span>) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="18"><span class="ln">18</span>            <span class="kw">if</span> i == <span class="bi">len</span>(word):</span><span class="code-line" data-code-line="19"><span class="ln">19</span>                <span class="kw">return</span> node.end</span><span class="code-line" data-code-line="20"><span class="ln">20</span>            ch = word[i]</span><span class="code-line" data-code-line="21"><span class="ln">21</span>            <span class="kw">if</span> ch == <span class="str">&quot;.&quot;</span>:</span><span class="code-line" data-code-line="22"><span class="ln">22</span>                <span class="kw">return</span> <span class="bi">any</span>(<span class="fn">dfs</span>(child, i + <span class="num">1</span>) <span class="kw">for</span> child <span class="kw">in</span> node.children.<span class="fn">values</span>())</span><span class="code-line" data-code-line="23"><span class="ln">23</span>            <span class="kw">if</span> ch <span class="kw">not</span> <span class="kw">in</span> node.children:</span><span class="code-line" data-code-line="24"><span class="ln">24</span>                <span class="kw">return</span> <span class="kw">False</span></span><span class="code-line" data-code-line="25"><span class="ln">25</span>            <span class="kw">return</span> <span class="fn">dfs</span>(node.children[ch], i + <span class="num">1</span>)</span><span class="code-line" data-code-line="26"><span class="ln">26</span>&nbsp;</span><span class="code-line" data-code-line="27"><span class="ln">27</span>        <span class="kw">return</span> <span class="fn">dfs</span>(self.root, <span class="num">0</span>)</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(m) typical, O(26^m) worst case with many wildcards</b></span>
+    <span>Space <b>O(total characters added)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">addWord(&quot;bad&quot;); search(&quot;b.d&quot;) → True</div>
+    <ol class="approach-list"><li>Store words in a trie exactly like Implement Trie.</li><li>Search with DFS instead of a straight walk, to handle backtracking.</li><li>On a normal letter, follow that one child if it exists.</li><li>On &#x27;.&#x27;, try every child at that level — if any path leads to a match, return True.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Binary Tree Maximum Path Sum · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Trees</div>
+  <div class="problem-header">
+    <h1>Binary Tree Maximum Path Sum</h1>
+    <div class="problem-meta">
+      <span class="badge badge-hard">Hard</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Tree</span><span class="tag-chip">DFS</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #124 · Find the maximum sum along any path (not necessarily through the root).</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(h) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> Optional</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> TreeNode:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">__init__</span>(self, val=<span class="num">0</span>, left=<span class="kw">None</span>, right=<span class="kw">None</span>):</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        self.val = val</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        self.left = left</span><span class="code-line" data-code-line="7"><span class="ln">7</span>        self.right = right</span><span class="code-line" data-code-line="8"><span class="ln">8</span>&nbsp;</span><span class="code-line" data-code-line="9"><span class="ln">9</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="10"><span class="ln">10</span>    <span class="kw">def</span> <span class="fn">maxPathSum</span>(self, root: Optional[TreeNode]) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="11"><span class="ln">11</span>        best = <span class="bi">float</span>(<span class="str">&quot;-inf&quot;</span>)</span><span class="code-line" data-code-line="12"><span class="ln">12</span>&nbsp;</span><span class="code-line" data-code-line="13"><span class="ln">13</span>        <span class="kw">def</span> <span class="fn">dfs</span>(node: Optional[TreeNode]) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="14"><span class="ln">14</span>            <span class="kw">nonlocal</span> best</span><span class="code-line" data-code-line="15"><span class="ln">15</span>            <span class="kw">if</span> <span class="kw">not</span> node:</span><span class="code-line" data-code-line="16"><span class="ln">16</span>                <span class="kw">return</span> <span class="num">0</span></span><span class="code-line" data-code-line="17"><span class="ln">17</span>            left = <span class="bi">max</span>(<span class="fn">dfs</span>(node.left), <span class="num">0</span>)</span><span class="code-line" data-code-line="18"><span class="ln">18</span>            right = <span class="bi">max</span>(<span class="fn">dfs</span>(node.right), <span class="num">0</span>)</span><span class="code-line" data-code-line="19"><span class="ln">19</span>            best = <span class="bi">max</span>(best, node.val + left + right)</span><span class="code-line" data-code-line="20"><span class="ln">20</span>            <span class="kw">return</span> node.val + <span class="bi">max</span>(left, right)</span><span class="code-line" data-code-line="21"><span class="ln">21</span>&nbsp;</span><span class="code-line" data-code-line="22"><span class="ln">22</span>        <span class="fn">dfs</span>(root)</span><span class="code-line" data-code-line="23"><span class="ln">23</span>        <span class="kw">return</span> best</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(h)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">[-10,9,20,null,null,15,7]  →  42</div>
+    <ol class="approach-list"><li>For each node, compute the best &#x27;downward&#x27; path sum starting at it (dfs&#x27;s return value) — a path can only extend through one child upward.</li><li>Negative subtree contributions are clamped to 0 (better to not include them).</li><li>At each node, consider the path that goes through it using BOTH children (a &#x27;peak&#x27;) and update the global best.</li><li>Return only node.val + max(left, right) upward, since a path passed to the parent can&#x27;t branch both ways.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

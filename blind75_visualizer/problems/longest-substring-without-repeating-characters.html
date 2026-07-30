@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Longest Substring Without Repeating Characters · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Sliding Window</div>
+  <div class="problem-header">
+    <h1>Longest Substring Without Repeating Characters</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">String</span><span class="tag-chip">Sliding Window</span><span class="tag-chip">Hash Map</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #3 · Find the length of the longest substring with no repeated characters.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(min(n, charset)) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="2"><span class="ln">2</span>    <span class="kw">def</span> <span class="fn">lengthOfLongestSubstring</span>(self, s: <span class="bi">str</span>) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="3"><span class="ln">3</span>        seen = {}</span><span class="code-line" data-code-line="4"><span class="ln">4</span>        left = <span class="num">0</span></span><span class="code-line" data-code-line="5"><span class="ln">5</span>        best = <span class="num">0</span></span><span class="code-line" data-code-line="6"><span class="ln">6</span>        <span class="kw">for</span> right, ch <span class="kw">in</span> <span class="bi">enumerate</span>(s):</span><span class="code-line" data-code-line="7"><span class="ln">7</span>            <span class="kw">if</span> ch <span class="kw">in</span> seen <span class="kw">and</span> seen[ch] &gt;= left:</span><span class="code-line" data-code-line="8"><span class="ln">8</span>                left = seen[ch] + <span class="num">1</span></span><span class="code-line" data-code-line="9"><span class="ln">9</span>            seen[ch] = right</span><span class="code-line" data-code-line="10"><span class="ln">10</span>            best = <span class="bi">max</span>(best, right - left + <span class="num">1</span>)</span><span class="code-line" data-code-line="11"><span class="ln">11</span>        <span class="kw">return</span> best</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(min(n, charset))</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">s = &quot;abcabcbb&quot;  →  3  (&quot;abc&quot;)</div>
+    <ol class="approach-list"><li>Maintain a window [left, right] with a map of the last index each character was seen at.</li><li>When the character at right was already seen inside the current window, jump left past that occurrence.</li><li>Update the character&#x27;s last-seen index every step.</li><li>Track the max window length (right - left + 1) as you slide.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

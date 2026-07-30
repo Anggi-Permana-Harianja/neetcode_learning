@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Implement Trie (Prefix Tree) · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Tries</div>
+  <div class="problem-header">
+    <h1>Implement Trie (Prefix Tree)</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Trie</span><span class="tag-chip">Design</span><span class="tag-chip">Hash Map</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #208 · Implement insert, search, and startsWith for a prefix tree.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(m) per operation, m = word length time · O(total characters inserted) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">class</span> TrieNode:</span><span class="code-line" data-code-line="2"><span class="ln">2</span>    <span class="kw">def</span> <span class="fn">__init__</span>(self):</span><span class="code-line" data-code-line="3"><span class="ln">3</span>        self.children = {}</span><span class="code-line" data-code-line="4"><span class="ln">4</span>        self.end = <span class="kw">False</span></span><span class="code-line" data-code-line="5"><span class="ln">5</span>&nbsp;</span><span class="code-line" data-code-line="6"><span class="ln">6</span><span class="kw">class</span> Trie:</span><span class="code-line" data-code-line="7"><span class="ln">7</span>    <span class="kw">def</span> <span class="fn">__init__</span>(self):</span><span class="code-line" data-code-line="8"><span class="ln">8</span>        self.root = <span class="fn">TrieNode</span>()</span><span class="code-line" data-code-line="9"><span class="ln">9</span>&nbsp;</span><span class="code-line" data-code-line="10"><span class="ln">10</span>    <span class="kw">def</span> <span class="fn">insert</span>(self, word: <span class="bi">str</span>) -&gt; <span class="kw">None</span>:</span><span class="code-line" data-code-line="11"><span class="ln">11</span>        node = self.root</span><span class="code-line" data-code-line="12"><span class="ln">12</span>        <span class="kw">for</span> ch <span class="kw">in</span> word:</span><span class="code-line" data-code-line="13"><span class="ln">13</span>            node = node.children.<span class="fn">setdefault</span>(ch, <span class="fn">TrieNode</span>())</span><span class="code-line" data-code-line="14"><span class="ln">14</span>        node.end = <span class="kw">True</span></span><span class="code-line" data-code-line="15"><span class="ln">15</span>&nbsp;</span><span class="code-line" data-code-line="16"><span class="ln">16</span>    <span class="kw">def</span> <span class="fn">search</span>(self, word: <span class="bi">str</span>) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="17"><span class="ln">17</span>        node = self.<span class="fn">_find</span>(word)</span><span class="code-line" data-code-line="18"><span class="ln">18</span>        <span class="kw">return</span> node <span class="kw">is</span> <span class="kw">not</span> <span class="kw">None</span> <span class="kw">and</span> node.end</span><span class="code-line" data-code-line="19"><span class="ln">19</span>&nbsp;</span><span class="code-line" data-code-line="20"><span class="ln">20</span>    <span class="kw">def</span> <span class="fn">startsWith</span>(self, prefix: <span class="bi">str</span>) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="21"><span class="ln">21</span>        <span class="kw">return</span> self.<span class="fn">_find</span>(prefix) <span class="kw">is</span> <span class="kw">not</span> <span class="kw">None</span></span><span class="code-line" data-code-line="22"><span class="ln">22</span>&nbsp;</span><span class="code-line" data-code-line="23"><span class="ln">23</span>    <span class="kw">def</span> <span class="fn">_find</span>(self, word: <span class="bi">str</span>):</span><span class="code-line" data-code-line="24"><span class="ln">24</span>        node = self.root</span><span class="code-line" data-code-line="25"><span class="ln">25</span>        <span class="kw">for</span> ch <span class="kw">in</span> word:</span><span class="code-line" data-code-line="26"><span class="ln">26</span>            <span class="kw">if</span> ch <span class="kw">not</span> <span class="kw">in</span> node.children:</span><span class="code-line" data-code-line="27"><span class="ln">27</span>                <span class="kw">return</span> <span class="kw">None</span></span><span class="code-line" data-code-line="28"><span class="ln">28</span>            node = node.children[ch]</span><span class="code-line" data-code-line="29"><span class="ln">29</span>        <span class="kw">return</span> node</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(m) per operation, m = word length</b></span>
+    <span>Space <b>O(total characters inserted)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">insert(&quot;apple&quot;); search(&quot;apple&quot;) → True; startsWith(&quot;app&quot;) → True</div>
+    <ol class="approach-list"><li>Each TrieNode holds a map of character → child node, plus an &#x27;end of word&#x27; flag.</li><li>insert: walk/create a child for each character, then mark the last node as end.</li><li>search: walk the characters; if any is missing, fail — otherwise check the end flag.</li><li>startsWith: same walk, but don&#x27;t check the end flag — just that the path exists.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

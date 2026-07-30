@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Maximum Subarray · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / 1-D Dynamic Programming</div>
+  <div class="problem-header">
+    <h1>Maximum Subarray</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">DP</span><span class="tag-chip">Array</span><span class="tag-chip">Greedy</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #53 · Find the contiguous subarray with the largest sum (Kadane&#x27;s algorithm).</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">maxSubArray</span>(self, nums: List[<span class="bi">int</span>]) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        best = nums[<span class="num">0</span>]</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        curr = <span class="num">0</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>        <span class="kw">for</span> num <span class="kw">in</span> nums:</span><span class="code-line" data-code-line="8"><span class="ln">8</span>            curr = <span class="bi">max</span>(curr, <span class="num">0</span>) + num</span><span class="code-line" data-code-line="9"><span class="ln">9</span>            best = <span class="bi">max</span>(best, curr)</span><span class="code-line" data-code-line="10"><span class="ln">10</span>        <span class="kw">return</span> best</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">nums = [-2,1,-3,4,-1,2,1,-5,4]  →  6  ([4,-1,2,1])</div>
+    <ol class="approach-list"><li>Track a running sum of the &#x27;best subarray ending here&#x27;.</li><li>If the running sum ever drops below 0, it can only hurt any future subarray — reset it to 0 before adding the next number.</li><li>Update the global best after adding each number.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

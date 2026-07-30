@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Container With Most Water · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Two Pointers</div>
+  <div class="problem-header">
+    <h1>Container With Most Water</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Array</span><span class="tag-chip">Two Pointers</span><span class="tag-chip">Greedy</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #11 · Choose two lines that, together with the x-axis, hold the most water.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">maxArea</span>(self, height: List[<span class="bi">int</span>]) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        left, right = <span class="num">0</span>, <span class="bi">len</span>(height) - <span class="num">1</span></span><span class="code-line" data-code-line="6"><span class="ln">6</span>        best = <span class="num">0</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>        <span class="kw">while</span> left &lt; right:</span><span class="code-line" data-code-line="8"><span class="ln">8</span>            area = (right - left) * <span class="bi">min</span>(height[left], height[right])</span><span class="code-line" data-code-line="9"><span class="ln">9</span>            best = <span class="bi">max</span>(best, area)</span><span class="code-line" data-code-line="10"><span class="ln">10</span>            <span class="kw">if</span> height[left] &lt; height[right]:</span><span class="code-line" data-code-line="11"><span class="ln">11</span>                left += <span class="num">1</span></span><span class="code-line" data-code-line="12"><span class="ln">12</span>            <span class="kw">else</span>:</span><span class="code-line" data-code-line="13"><span class="ln">13</span>                right -= <span class="num">1</span></span><span class="code-line" data-code-line="14"><span class="ln">14</span>        <span class="kw">return</span> best</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">height = [1,8,6,2,5,4,8,3,7]  →  49</div>
+    <ol class="approach-list"><li>Start pointers at both ends — the widest possible container.</li><li>The area is limited by the shorter of the two lines, so track the best area seen.</li><li>Move the pointer at the shorter line inward — moving the taller one can only shrink width without helping height.</li><li>Repeat until the pointers meet.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

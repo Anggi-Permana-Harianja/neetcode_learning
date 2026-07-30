@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Longest Palindromic Substring · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / 1-D Dynamic Programming</div>
+  <div class="problem-header">
+    <h1>Longest Palindromic Substring</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">DP</span><span class="tag-chip">String</span><span class="tag-chip">Two Pointers</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #5 · Find the longest substring of s that reads the same forward and backward.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n²) time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="2"><span class="ln">2</span>    <span class="kw">def</span> <span class="fn">longestPalindrome</span>(self, s: <span class="bi">str</span>) -&gt; <span class="bi">str</span>:</span><span class="code-line" data-code-line="3"><span class="ln">3</span>        best = <span class="str">&quot;&quot;</span></span><span class="code-line" data-code-line="4"><span class="ln">4</span>&nbsp;</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        <span class="kw">def</span> <span class="fn">expand</span>(l: <span class="bi">int</span>, r: <span class="bi">int</span>) -&gt; <span class="bi">str</span>:</span><span class="code-line" data-code-line="6"><span class="ln">6</span>            <span class="kw">while</span> l &gt;= <span class="num">0</span> <span class="kw">and</span> r &lt; <span class="bi">len</span>(s) <span class="kw">and</span> s[l] == s[r]:</span><span class="code-line" data-code-line="7"><span class="ln">7</span>                l -= <span class="num">1</span></span><span class="code-line" data-code-line="8"><span class="ln">8</span>                r += <span class="num">1</span></span><span class="code-line" data-code-line="9"><span class="ln">9</span>            <span class="kw">return</span> s[l + <span class="num">1</span>:r]</span><span class="code-line" data-code-line="10"><span class="ln">10</span>&nbsp;</span><span class="code-line" data-code-line="11"><span class="ln">11</span>        <span class="kw">for</span> i <span class="kw">in</span> <span class="bi">range</span>(<span class="bi">len</span>(s)):</span><span class="code-line" data-code-line="12"><span class="ln">12</span>            odd = <span class="fn">expand</span>(i, i)</span><span class="code-line" data-code-line="13"><span class="ln">13</span>            even = <span class="fn">expand</span>(i, i + <span class="num">1</span>)</span><span class="code-line" data-code-line="14"><span class="ln">14</span>            best = <span class="bi">max</span>(best, odd, even, key=<span class="bi">len</span>)</span><span class="code-line" data-code-line="15"><span class="ln">15</span>        <span class="kw">return</span> best</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n²)</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">s = &quot;babad&quot;  →  &quot;bab&quot; (or &quot;aba&quot;)</div>
+    <ol class="approach-list"><li>Every palindrome has a center — either one character (odd length) or between two characters (even length).</li><li>For each possible center, expand outward while the characters on both sides match.</li><li>Try both an odd-length expansion (center = i) and even-length expansion (center = i, i+1) for every index.</li><li>Track the longest match found across all centers.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

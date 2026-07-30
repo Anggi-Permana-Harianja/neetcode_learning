@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Number of Islands · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Graphs</div>
+  <div class="problem-header">
+    <h1>Number of Islands</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Graph</span><span class="tag-chip">BFS</span><span class="tag-chip">DFS</span><span class="tag-chip">Matrix</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #200 · Count the number of connected groups of &#x27;1&#x27;s in a grid.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(rows · cols) time · O(rows · cols) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">numIslands</span>(self, grid: List[List[<span class="bi">str</span>]]) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        <span class="kw">if</span> <span class="kw">not</span> grid:</span><span class="code-line" data-code-line="6"><span class="ln">6</span>            <span class="kw">return</span> <span class="num">0</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>        rows, cols = <span class="bi">len</span>(grid), <span class="bi">len</span>(grid[<span class="num">0</span>])</span><span class="code-line" data-code-line="8"><span class="ln">8</span>        visited = <span class="bi">set</span>()</span><span class="code-line" data-code-line="9"><span class="ln">9</span>        count = <span class="num">0</span></span><span class="code-line" data-code-line="10"><span class="ln">10</span>&nbsp;</span><span class="code-line" data-code-line="11"><span class="ln">11</span>        <span class="kw">def</span> <span class="fn">bfs</span>(r: <span class="bi">int</span>, c: <span class="bi">int</span>) -&gt; <span class="kw">None</span>:</span><span class="code-line" data-code-line="12"><span class="ln">12</span>            queue = [(r, c)]</span><span class="code-line" data-code-line="13"><span class="ln">13</span>            visited.<span class="fn">add</span>((r, c))</span><span class="code-line" data-code-line="14"><span class="ln">14</span>            <span class="kw">while</span> queue:</span><span class="code-line" data-code-line="15"><span class="ln">15</span>                row, col = queue.<span class="fn">pop</span>()</span><span class="code-line" data-code-line="16"><span class="ln">16</span>                <span class="kw">for</span> dr, dc <span class="kw">in</span> ((<span class="num">1</span>, <span class="num">0</span>), (-<span class="num">1</span>, <span class="num">0</span>), (<span class="num">0</span>, <span class="num">1</span>), (<span class="num">0</span>, -<span class="num">1</span>)):</span><span class="code-line" data-code-line="17"><span class="ln">17</span>                    nr, nc = row + dr, col + dc</span><span class="code-line" data-code-line="18"><span class="ln">18</span>                    <span class="kw">if</span> (<span class="num">0</span> &lt;= nr &lt; rows <span class="kw">and</span> <span class="num">0</span> &lt;= nc &lt; cols <span class="kw">and</span></span><span class="code-line" data-code-line="19"><span class="ln">19</span>                            grid[nr][nc] == <span class="str">&quot;1&quot;</span> <span class="kw">and</span> (nr, nc) <span class="kw">not</span> <span class="kw">in</span> visited):</span><span class="code-line" data-code-line="20"><span class="ln">20</span>                        visited.<span class="fn">add</span>((nr, nc))</span><span class="code-line" data-code-line="21"><span class="ln">21</span>                        queue.<span class="fn">append</span>((nr, nc))</span><span class="code-line" data-code-line="22"><span class="ln">22</span>&nbsp;</span><span class="code-line" data-code-line="23"><span class="ln">23</span>        <span class="kw">for</span> r <span class="kw">in</span> <span class="bi">range</span>(rows):</span><span class="code-line" data-code-line="24"><span class="ln">24</span>            <span class="kw">for</span> c <span class="kw">in</span> <span class="bi">range</span>(cols):</span><span class="code-line" data-code-line="25"><span class="ln">25</span>                <span class="kw">if</span> grid[r][c] == <span class="str">&quot;1&quot;</span> <span class="kw">and</span> (r, c) <span class="kw">not</span> <span class="kw">in</span> visited:</span><span class="code-line" data-code-line="26"><span class="ln">26</span>                    <span class="fn">bfs</span>(r, c)</span><span class="code-line" data-code-line="27"><span class="ln">27</span>                    count += <span class="num">1</span></span><span class="code-line" data-code-line="28"><span class="ln">28</span>        <span class="kw">return</span> count</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(rows · cols)</b></span>
+    <span>Space <b>O(rows · cols)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">[[&quot;1&quot;,&quot;1&quot;,&quot;0&quot;],[&quot;0&quot;,&quot;1&quot;,&quot;0&quot;],[&quot;0&quot;,&quot;0&quot;,&quot;1&quot;]]  →  2</div>
+    <ol class="approach-list"><li>Scan every cell; whenever an unvisited &#x27;1&#x27; is found, that&#x27;s a brand new island — increment the count.</li><li>BFS (or DFS) outward from that cell across all connected &#x27;1&#x27;s, marking each visited so it isn&#x27;t recounted.</li><li>Only explore the 4 orthogonal neighbors (up/down/left/right).</li><li>Continue scanning after the flood-fill returns.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

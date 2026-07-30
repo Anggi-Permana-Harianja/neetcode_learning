@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Number of 1 Bits · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Bit Manipulation</div>
+  <div class="problem-header">
+    <h1>Number of 1 Bits</h1>
+    <div class="problem-meta">
+      <span class="badge badge-easy">Easy</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Bit Manipulation</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #191 · Count the number of set bits (1s) in an integer&#x27;s binary representation.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(k) — k = number of set bits time · O(1) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="2"><span class="ln">2</span>    <span class="kw">def</span> <span class="fn">hammingWeight</span>(self, n: <span class="bi">int</span>) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="3"><span class="ln">3</span>        count = <span class="num">0</span></span><span class="code-line" data-code-line="4"><span class="ln">4</span>        <span class="kw">while</span> n:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>            n &amp;= n - <span class="num">1</span></span><span class="code-line" data-code-line="6"><span class="ln">6</span>            count += <span class="num">1</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>        <span class="kw">return</span> count</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(k) — k = number of set bits</b></span>
+    <span>Space <b>O(1)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">n = 11 (1011)  →  3</div>
+    <ol class="approach-list"><li>n &amp; (n - 1) clears the lowest set bit of n (a well-known bit trick).</li><li>Repeat that operation, counting each time, until n becomes 0.</li><li>The number of iterations equals the number of set bits — faster than checking all 32 bit positions when few are set.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pacific Atlantic Water Flow · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Graphs</div>
+  <div class="problem-header">
+    <h1>Pacific Atlantic Water Flow</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Graph</span><span class="tag-chip">DFS</span><span class="tag-chip">Matrix</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #417 · Find cells from which water can flow to both the Pacific and Atlantic oceans.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(rows · cols) time · O(rows · cols) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">pacificAtlantic</span>(self, heights: List[List[<span class="bi">int</span>]]) -&gt; List[List[<span class="bi">int</span>]]:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        <span class="kw">if</span> <span class="kw">not</span> heights:</span><span class="code-line" data-code-line="6"><span class="ln">6</span>            <span class="kw">return</span> []</span><span class="code-line" data-code-line="7"><span class="ln">7</span>        rows, cols = <span class="bi">len</span>(heights), <span class="bi">len</span>(heights[<span class="num">0</span>])</span><span class="code-line" data-code-line="8"><span class="ln">8</span>        pacific, atlantic = <span class="bi">set</span>(), <span class="bi">set</span>()</span><span class="code-line" data-code-line="9"><span class="ln">9</span>&nbsp;</span><span class="code-line" data-code-line="10"><span class="ln">10</span>        <span class="kw">def</span> <span class="fn">dfs</span>(r: <span class="bi">int</span>, c: <span class="bi">int</span>, visited: <span class="bi">set</span>, prev_height: <span class="bi">int</span>) -&gt; <span class="kw">None</span>:</span><span class="code-line" data-code-line="11"><span class="ln">11</span>            <span class="kw">if</span> ((r, c) <span class="kw">in</span> visited <span class="kw">or</span> r &lt; <span class="num">0</span> <span class="kw">or</span> r &gt;= rows <span class="kw">or</span> c &lt; <span class="num">0</span> <span class="kw">or</span> c &gt;= cols <span class="kw">or</span></span><span class="code-line" data-code-line="12"><span class="ln">12</span>                    heights[r][c] &lt; prev_height):</span><span class="code-line" data-code-line="13"><span class="ln">13</span>                <span class="kw">return</span></span><span class="code-line" data-code-line="14"><span class="ln">14</span>            visited.<span class="fn">add</span>((r, c))</span><span class="code-line" data-code-line="15"><span class="ln">15</span>            <span class="kw">for</span> dr, dc <span class="kw">in</span> ((<span class="num">1</span>, <span class="num">0</span>), (-<span class="num">1</span>, <span class="num">0</span>), (<span class="num">0</span>, <span class="num">1</span>), (<span class="num">0</span>, -<span class="num">1</span>)):</span><span class="code-line" data-code-line="16"><span class="ln">16</span>                <span class="fn">dfs</span>(r + dr, c + dc, visited, heights[r][c])</span><span class="code-line" data-code-line="17"><span class="ln">17</span>&nbsp;</span><span class="code-line" data-code-line="18"><span class="ln">18</span>        <span class="kw">for</span> c <span class="kw">in</span> <span class="bi">range</span>(cols):</span><span class="code-line" data-code-line="19"><span class="ln">19</span>            <span class="fn">dfs</span>(<span class="num">0</span>, c, pacific, heights[<span class="num">0</span>][c])</span><span class="code-line" data-code-line="20"><span class="ln">20</span>            <span class="fn">dfs</span>(rows - <span class="num">1</span>, c, atlantic, heights[rows - <span class="num">1</span>][c])</span><span class="code-line" data-code-line="21"><span class="ln">21</span>        <span class="kw">for</span> r <span class="kw">in</span> <span class="bi">range</span>(rows):</span><span class="code-line" data-code-line="22"><span class="ln">22</span>            <span class="fn">dfs</span>(r, <span class="num">0</span>, pacific, heights[r][<span class="num">0</span>])</span><span class="code-line" data-code-line="23"><span class="ln">23</span>            <span class="fn">dfs</span>(r, cols - <span class="num">1</span>, atlantic, heights[r][cols - <span class="num">1</span>])</span><span class="code-line" data-code-line="24"><span class="ln">24</span>&nbsp;</span><span class="code-line" data-code-line="25"><span class="ln">25</span>        <span class="kw">return</span> [[r, c] <span class="kw">for</span> r <span class="kw">in</span> <span class="bi">range</span>(rows) <span class="kw">for</span> c <span class="kw">in</span> <span class="bi">range</span>(cols) <span class="kw">if</span> (r, c) <span class="kw">in</span> pacific <span class="kw">and</span> (r, c) <span class="kw">in</span> atlantic]</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(rows · cols)</b></span>
+    <span>Space <b>O(rows · cols)</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">heights grid, oceans border top/left (Pacific) and bottom/right (Atlantic)</div>
+    <ol class="approach-list"><li>Instead of checking &#x27;can this cell reach the ocean&#x27; (expensive per cell), reverse it: flow uphill from each ocean&#x27;s border cells inward.</li><li>DFS from every Pacific-adjacent border cell, moving to neighbors with height &gt;= current (since water flows downhill, reversed means uphill-or-equal is reachable).</li><li>Do the same from Atlantic-adjacent border cells into a separate visited set.</li><li>A cell reachable from both oceans is part of the answer.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

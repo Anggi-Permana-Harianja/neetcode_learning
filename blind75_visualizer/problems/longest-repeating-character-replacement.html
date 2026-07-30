@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Longest Repeating Character Replacement · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Sliding Window</div>
+  <div class="problem-header">
+    <h1>Longest Repeating Character Replacement</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">String</span><span class="tag-chip">Sliding Window</span><span class="tag-chip">Hash Map</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #424 · Longest substring achievable by replacing at most k characters with any letter.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(1) — 26 letters space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="2"><span class="ln">2</span>    <span class="kw">def</span> <span class="fn">characterReplacement</span>(self, s: <span class="bi">str</span>, k: <span class="bi">int</span>) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="3"><span class="ln">3</span>        counts = {}</span><span class="code-line" data-code-line="4"><span class="ln">4</span>        left = <span class="num">0</span></span><span class="code-line" data-code-line="5"><span class="ln">5</span>        max_count = <span class="num">0</span></span><span class="code-line" data-code-line="6"><span class="ln">6</span>        best = <span class="num">0</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>        <span class="kw">for</span> right, ch <span class="kw">in</span> <span class="bi">enumerate</span>(s):</span><span class="code-line" data-code-line="8"><span class="ln">8</span>            counts[ch] = counts.<span class="fn">get</span>(ch, <span class="num">0</span>) + <span class="num">1</span></span><span class="code-line" data-code-line="9"><span class="ln">9</span>            max_count = <span class="bi">max</span>(max_count, counts[ch])</span><span class="code-line" data-code-line="10"><span class="ln">10</span>            <span class="kw">while</span> (right - left + <span class="num">1</span>) - max_count &gt; k:</span><span class="code-line" data-code-line="11"><span class="ln">11</span>                counts[s[left]] -= <span class="num">1</span></span><span class="code-line" data-code-line="12"><span class="ln">12</span>                left += <span class="num">1</span></span><span class="code-line" data-code-line="13"><span class="ln">13</span>            best = <span class="bi">max</span>(best, right - left + <span class="num">1</span>)</span><span class="code-line" data-code-line="14"><span class="ln">14</span>        <span class="kw">return</span> best</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(1) — 26 letters</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">s = &quot;AABABBA&quot;, k = 1  →  4</div>
+    <ol class="approach-list"><li>Grow a window while tracking counts of each letter inside it.</li><li>A window is valid if (window length - most frequent letter&#x27;s count) &lt;= k — that&#x27;s how many replacements it needs.</li><li>If the window becomes invalid, shrink it from the left by one.</li><li>Track the best valid window length throughout; max_count doesn&#x27;t need to shrink accurately since only its peak matters.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>
