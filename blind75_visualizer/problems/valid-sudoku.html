@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Valid Sudoku · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Arrays &amp; Hashing</div>
+  <div class="problem-header">
+    <h1>Valid Sudoku</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Array</span><span class="tag-chip">Hash Set</span><span class="tag-chip">Matrix</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #36 · Check whether a partially filled 9x9 Sudoku board is valid so far.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(1) — board is fixed at 81 cells time · O(1) — 27 sets of at most 9 digits space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">isValidSudoku</span>(self, board: List[List[<span class="bi">str</span>]]) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        rows = [<span class="bi">set</span>() <span class="kw">for</span> _ <span class="kw">in</span> <span class="bi">range</span>(<span class="num">9</span>)]</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        cols = [<span class="bi">set</span>() <span class="kw">for</span> _ <span class="kw">in</span> <span class="bi">range</span>(<span class="num">9</span>)]</span><span class="code-line" data-code-line="7"><span class="ln">7</span>        boxes = [<span class="bi">set</span>() <span class="kw">for</span> _ <span class="kw">in</span> <span class="bi">range</span>(<span class="num">9</span>)]</span><span class="code-line" data-code-line="8"><span class="ln">8</span>&nbsp;</span><span class="code-line" data-code-line="9"><span class="ln">9</span>        <span class="kw">for</span> r <span class="kw">in</span> <span class="bi">range</span>(<span class="num">9</span>):</span><span class="code-line" data-code-line="10"><span class="ln">10</span>            <span class="kw">for</span> c <span class="kw">in</span> <span class="bi">range</span>(<span class="num">9</span>):</span><span class="code-line" data-code-line="11"><span class="ln">11</span>                val = board[r][c]</span><span class="code-line" data-code-line="12"><span class="ln">12</span>                <span class="kw">if</span> val == <span class="str">&quot;.&quot;</span>:</span><span class="code-line" data-code-line="13"><span class="ln">13</span>                    <span class="kw">continue</span></span><span class="code-line" data-code-line="14"><span class="ln">14</span>                b = (r // <span class="num">3</span>) * <span class="num">3</span> + c // <span class="num">3</span></span><span class="code-line" data-code-line="15"><span class="ln">15</span>                <span class="kw">if</span> val <span class="kw">in</span> rows[r] <span class="kw">or</span> val <span class="kw">in</span> cols[c] <span class="kw">or</span> val <span class="kw">in</span> boxes[b]:</span><span class="code-line" data-code-line="16"><span class="ln">16</span>                    <span class="kw">return</span> <span class="kw">False</span></span><span class="code-line" data-code-line="17"><span class="ln">17</span>                rows[r].<span class="fn">add</span>(val)</span><span class="code-line" data-code-line="18"><span class="ln">18</span>                cols[c].<span class="fn">add</span>(val)</span><span class="code-line" data-code-line="19"><span class="ln">19</span>                boxes[b].<span class="fn">add</span>(val)</span><span class="code-line" data-code-line="20"><span class="ln">20</span>        <span class="kw">return</span> <span class="kw">True</span></span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(1) — board is fixed at 81 cells</b></span>
+    <span>Space <b>O(1) — 27 sets of at most 9 digits</b></span>
+  </div>
+</div>
+    <div class="panel">
+  <div class="panel-head"><span>Approach</span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">board[i][j] is a digit &quot;1&quot;-&quot;9&quot; or &quot;.&quot;</div>
+    <ol class="approach-list"><li>Keep one set per row, per column, and per 3×3 box (9 of each) to track digits already placed.</li><li>Scan every cell of the 9x9 board; skip empty cells (&quot;.&quot;).</li><li>Compute which box a cell belongs to with (r // 3) * 3 + c // 3.</li><li>If the digit is already in that row&#x27;s, column&#x27;s, or box&#x27;s set, the board is invalid — return False.</li><li>Otherwise record the digit in all three sets and continue; no conflicts after a full scan means it&#x27;s valid.</li></ol>
+    <div class="static-note">A full step-by-step animation for this problem is planned; for now this walkthrough plus the annotated code covers the approach.</div>
+  </div>
+</div>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

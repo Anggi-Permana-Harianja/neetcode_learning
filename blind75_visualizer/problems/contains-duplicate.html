@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contains Duplicate · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Arrays &amp; Hashing</div>
+  <div class="problem-header">
+    <h1>Contains Duplicate</h1>
+    <div class="problem-meta">
+      <span class="badge badge-easy">Easy</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Array</span><span class="tag-chip">Hash Set</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #217 · Return true if any value appears at least twice in the array.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(n) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">containsDuplicate</span>(self, nums: List[<span class="bi">int</span>]) -&gt; <span class="bi">bool</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        seen = <span class="bi">set</span>()</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        <span class="kw">for</span> num <span class="kw">in</span> nums:</span><span class="code-line" data-code-line="7"><span class="ln">7</span>            <span class="kw">if</span> num <span class="kw">in</span> seen:</span><span class="code-line" data-code-line="8"><span class="ln">8</span>                <span class="kw">return</span> <span class="kw">True</span></span><span class="code-line" data-code-line="9"><span class="ln">9</span>            seen.<span class="fn">add</span>(num)</span><span class="code-line" data-code-line="10"><span class="ln">10</span>        <span class="kw">return</span> <span class="kw">False</span></span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(n)</b></span>
+  </div>
+</div>
+    <div class="panel" data-viz-root>
+  <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">nums = [1, 2, 3, 1]  →  True</div>
+    <div data-viz-rows></div>
+    <div data-viz-map-block>
+      <div class="row-label" data-viz-map-label></div>
+      <div class="set-panel" data-viz-map></div>
+    </div>
+    <div class="narration" data-viz-narration></div>
+    <div class="player-controls">
+      <button data-viz-reset title="Reset">&#8676; Reset</button>
+      <button data-viz-prev title="Previous step">&#8592; Prev</button>
+      <button class="primary" data-viz-play title="Play / pause">Play</button>
+      <button data-viz-next title="Next step">Next &#8594;</button>
+      <span class="spacer"></span>
+      <select class="speed-select" data-viz-speed title="Playback speed">
+        <option value="1000">0.5x</option>
+        <option value="700" selected>1x</option>
+        <option value="350">2x</option>
+      </select>
+    </div>
+  </div>
+</div>
+<script>window.STEPS = [{"line": 5, "narration": "Start with an empty set to track numbers we've seen.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": []}}, {"line": 7, "narration": "Check if <b>1</b> is in <code>seen</code> \u2014 the set is empty, so no.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "current"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": []}}, {"line": 9, "narration": "Not found \u2014 add <b>1</b> to <code>seen</code>.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": true}]}}, {"line": 7, "narration": "Check if <b>2</b> is in <code>seen</code> \u2014 not yet.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "current"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}]}}, {"line": 9, "narration": "Not found \u2014 add <b>2</b> to <code>seen</code>.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "pending"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": true}]}}, {"line": 7, "narration": "Check if <b>3</b> is in <code>seen</code> \u2014 not yet.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "current"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": false}]}}, {"line": 9, "narration": "Not found \u2014 add <b>3</b> to <code>seen</code>.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 1, "state": "pending"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": false}, {"v": 3, "added": true}]}}, {"line": 7, "narration": "Check if <b>1</b> is in <code>seen</code> \u2014 yes, added back at index 0!", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 1, "state": "current"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": false}, {"v": 3, "added": false}]}}, {"line": 8, "narration": "<b>Duplicate found \u2014 return True.</b>", "rows": [{"label": "nums", "items": [{"v": 1, "state": "hit"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}, {"v": 1, "state": "hit"}]}], "map": {"label": "seen (set)", "items": [{"v": 1, "added": false}, {"v": 2, "added": false}, {"v": 3, "added": false}]}}];</script>
+<script src="../shared/viz.js"></script>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

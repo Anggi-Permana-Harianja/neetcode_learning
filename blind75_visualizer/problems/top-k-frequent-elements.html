@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Top K Frequent Elements · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Arrays &amp; Hashing</div>
+  <div class="problem-header">
+    <h1>Top K Frequent Elements</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Array</span><span class="tag-chip">Hash Map</span><span class="tag-chip">Bucket Sort</span><span class="tag-chip">Heap</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #347 · Return the k most frequent elements in the array.</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) — bucket sort avoids an O(n log n) sort time · O(n) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span><span class="kw">from</span> collections <span class="kw">import</span> Counter</span><span class="code-line" data-code-line="3"><span class="ln">3</span>&nbsp;</span><span class="code-line" data-code-line="4"><span class="ln">4</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>    <span class="kw">def</span> <span class="fn">topKFrequent</span>(self, nums: List[<span class="bi">int</span>], k: <span class="bi">int</span>) -&gt; List[<span class="bi">int</span>]:</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        count = <span class="fn">Counter</span>(nums)</span><span class="code-line" data-code-line="7"><span class="ln">7</span>        buckets = [[] <span class="kw">for</span> _ <span class="kw">in</span> <span class="bi">range</span>(<span class="bi">len</span>(nums) + <span class="num">1</span>)]</span><span class="code-line" data-code-line="8"><span class="ln">8</span>        <span class="kw">for</span> num, freq <span class="kw">in</span> count.<span class="fn">items</span>():</span><span class="code-line" data-code-line="9"><span class="ln">9</span>            buckets[freq].<span class="fn">append</span>(num)</span><span class="code-line" data-code-line="10"><span class="ln">10</span>&nbsp;</span><span class="code-line" data-code-line="11"><span class="ln">11</span>        result = []</span><span class="code-line" data-code-line="12"><span class="ln">12</span>        <span class="kw">for</span> freq <span class="kw">in</span> <span class="bi">range</span>(<span class="bi">len</span>(buckets) - <span class="num">1</span>, <span class="num">0</span>, -<span class="num">1</span>):</span><span class="code-line" data-code-line="13"><span class="ln">13</span>            <span class="kw">for</span> num <span class="kw">in</span> buckets[freq]:</span><span class="code-line" data-code-line="14"><span class="ln">14</span>                result.<span class="fn">append</span>(num)</span><span class="code-line" data-code-line="15"><span class="ln">15</span>                <span class="kw">if</span> <span class="bi">len</span>(result) == k:</span><span class="code-line" data-code-line="16"><span class="ln">16</span>                    <span class="kw">return</span> result</span><span class="code-line" data-code-line="17"><span class="ln">17</span>        <span class="kw">return</span> result</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n) — bucket sort avoids an O(n log n) sort</b></span>
+    <span>Space <b>O(n)</b></span>
+  </div>
+</div>
+    <div class="panel" data-viz-root>
+  <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">nums = [1,1,1,2,2,3], k = 2  →  [1, 2]</div>
+    <div data-viz-rows></div>
+    <div data-viz-map-block>
+      <div class="row-label" data-viz-map-label></div>
+      <div class="set-panel" data-viz-map></div>
+    </div>
+    <div class="narration" data-viz-narration></div>
+    <div class="player-controls">
+      <button data-viz-reset title="Reset">&#8676; Reset</button>
+      <button data-viz-prev title="Previous step">&#8592; Prev</button>
+      <button class="primary" data-viz-play title="Play / pause">Play</button>
+      <button data-viz-next title="Next step">Next &#8594;</button>
+      <span class="spacer"></span>
+      <select class="speed-select" data-viz-speed title="Playback speed">
+        <option value="1000">0.5x</option>
+        <option value="700" selected>1x</option>
+        <option value="350">2x</option>
+      </select>
+    </div>
+  </div>
+</div>
+<script>window.STEPS = [{"line": 6, "narration": "Count frequency of each number: 1\u21923, 2\u21922, 3\u21921.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 2, "state": "pending"}, {"v": 3, "state": "pending"}]}], "map": {"label": "count", "items": [{"v": "1:3", "added": true}, {"v": "2:2", "added": true}, {"v": "3:1", "added": true}]}}, {"line": 9, "narration": "Bucket numbers by frequency (bucket index = frequency): bucket[3]=[1], bucket[2]=[2], bucket[1]=[3].", "rows": [{"label": "nums", "items": [{"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]", "added": true}, {"v": "2 \u2192 [2]", "added": true}, {"v": "1 \u2192 [3]", "added": true}]}}, {"line": 13, "narration": "Walk buckets from highest frequency down. freq=3: take 1.", "rows": [{"label": "nums", "items": [{"v": 1, "state": "current"}, {"v": 1, "state": "done"}, {"v": 1, "state": "done"}, {"v": 2, "state": "done"}, {"v": 2, "state": "done"}, {"v": 3, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}, {"line": 14, "narration": "Add 1 to result \u2192 [1]. Not yet k=2 items.", "rows": [{"label": "result", "items": [{"v": 1, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}, {"line": 13, "narration": "freq=2: take 2.", "rows": [{"label": "result", "items": [{"v": 1, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}, {"line": 14, "narration": "Add 2 to result \u2192 [1, 2].", "rows": [{"label": "result", "items": [{"v": 1, "state": "done"}, {"v": 2, "state": "done"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}, {"line": 16, "narration": "<b>len(result) == k \u2014 return [1, 2].</b> Reached the 2 most frequent elements.", "rows": [{"label": "result", "items": [{"v": 1, "state": "hit"}, {"v": 2, "state": "hit"}]}], "map": {"label": "buckets (freq \u2192 nums)", "items": [{"v": "3 \u2192 [1]"}, {"v": "2 \u2192 [2]"}, {"v": "1 \u2192 [3]"}]}}];</script>
+<script src="../shared/viz.js"></script>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>

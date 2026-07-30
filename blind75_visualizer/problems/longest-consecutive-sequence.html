@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Longest Consecutive Sequence · Blind 75 Visualizer</title>
+<link rel="stylesheet" href="../shared/style.css" />
+</head>
+<body>
+<div class="topbar">
+  <a class="brand" href="../index.html"><span class="brand-mark">&gt;_</span> Blind 75 Visualizer <span class="brand-sub">local · no login</span></a>
+</div>
+
+<div class="page">
+  <div class="crumb"><a href="../index.html">Blind 75</a> / Arrays &amp; Hashing</div>
+  <div class="problem-header">
+    <h1>Longest Consecutive Sequence</h1>
+    <div class="problem-meta">
+      <span class="badge badge-medium">Medium</span>
+    </div>
+  </div>
+  <div class="problem-tags"><span class="tag-chip">Array</span><span class="tag-chip">Hash Set</span></div>
+  <p style="color:var(--text-dim); max-width:70ch; margin: -12px 0 22px;">LeetCode #128 · Find the length of the longest run of consecutive integers, in O(n).</p>
+  <div class="split">
+    <div class="panel">
+  <div class="panel-head"><span>solution.py</span><span>O(n) time · O(n) space</span></div>
+  <div class="code-block"><span class="code-line" data-code-line="1"><span class="ln">1</span><span class="kw">from</span> typing <span class="kw">import</span> List</span><span class="code-line" data-code-line="2"><span class="ln">2</span>&nbsp;</span><span class="code-line" data-code-line="3"><span class="ln">3</span><span class="kw">class</span> Solution:</span><span class="code-line" data-code-line="4"><span class="ln">4</span>    <span class="kw">def</span> <span class="fn">longestConsecutive</span>(self, nums: List[<span class="bi">int</span>]) -&gt; <span class="bi">int</span>:</span><span class="code-line" data-code-line="5"><span class="ln">5</span>        num_set = <span class="bi">set</span>(nums)</span><span class="code-line" data-code-line="6"><span class="ln">6</span>        longest = <span class="num">0</span></span><span class="code-line" data-code-line="7"><span class="ln">7</span>&nbsp;</span><span class="code-line" data-code-line="8"><span class="ln">8</span>        <span class="kw">for</span> num <span class="kw">in</span> num_set:</span><span class="code-line" data-code-line="9"><span class="ln">9</span>            <span class="kw">if</span> num - <span class="num">1</span> <span class="kw">not</span> <span class="kw">in</span> num_set:</span><span class="code-line" data-code-line="10"><span class="ln">10</span>                length = <span class="num">1</span></span><span class="code-line" data-code-line="11"><span class="ln">11</span>                <span class="kw">while</span> num + length <span class="kw">in</span> num_set:</span><span class="code-line" data-code-line="12"><span class="ln">12</span>                    length += <span class="num">1</span></span><span class="code-line" data-code-line="13"><span class="ln">13</span>                longest = <span class="bi">max</span>(longest, length)</span><span class="code-line" data-code-line="14"><span class="ln">14</span>&nbsp;</span><span class="code-line" data-code-line="15"><span class="ln">15</span>        <span class="kw">return</span> longest</span></div>
+  <div class="complexity-row">
+    <span>Time <b>O(n)</b></span>
+    <span>Space <b>O(n)</b></span>
+  </div>
+</div>
+    <div class="panel" data-viz-root>
+  <div class="panel-head"><span>Visualization</span><span class="step-counter" data-viz-counter></span></div>
+  <div class="panel-body viz-stage">
+    <div class="viz-example">nums = [100, 4, 200, 1, 3, 2]  →  4  (the run 1, 2, 3, 4)</div>
+    <div data-viz-rows></div>
+    <div data-viz-map-block>
+      <div class="row-label" data-viz-map-label></div>
+      <div class="set-panel" data-viz-map></div>
+    </div>
+    <div class="narration" data-viz-narration></div>
+    <div class="player-controls">
+      <button data-viz-reset title="Reset">&#8676; Reset</button>
+      <button data-viz-prev title="Previous step">&#8592; Prev</button>
+      <button class="primary" data-viz-play title="Play / pause">Play</button>
+      <button data-viz-next title="Next step">Next &#8594;</button>
+      <span class="spacer"></span>
+      <select class="speed-select" data-viz-speed title="Playback speed">
+        <option value="1000">0.5x</option>
+        <option value="700" selected>1x</option>
+        <option value="350">2x</option>
+      </select>
+    </div>
+  </div>
+</div>
+<script>window.STEPS = [{"line": 4, "narration": "Put every number in a set for O(1) lookups.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "pending"}, {"v": 4, "state": "pending"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100, "added": true}, {"v": 4, "added": true}, {"v": 200, "added": true}, {"v": 1, "added": true}, {"v": 3, "added": true}, {"v": 2, "added": true}]}}, {"line": 8, "narration": "100: is 99 in the set? No \u2014 100 could start a streak.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "current"}, {"v": 4, "state": "pending"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 10, "narration": "Count forward from 100: 101 is not in the set, so this streak has length 1. Best so far: 1.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "pending"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 8, "narration": "4: is 3 in the set? Yes \u2014 so 4 is NOT a streak start; skip it.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "current"}, {"v": 200, "state": "pending"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 8, "narration": "200: is 199 in the set? No \u2014 200 could start a streak. Counting forward finds length 1 (best stays 1).", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "done"}, {"v": 200, "state": "current"}, {"v": 1, "state": "pending"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 8, "narration": "1: is 0 in the set? No \u2014 1 could start a streak.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "done"}, {"v": 200, "state": "done"}, {"v": 1, "state": "current"}, {"v": 3, "state": "pending"}, {"v": 2, "state": "pending"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 10, "narration": "Count forward from 1: 2, 3, 4 are all in the set, 5 is not \u2192 streak length 4.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "hit"}, {"v": 200, "state": "done"}, {"v": 1, "state": "hit"}, {"v": 3, "state": "hit"}, {"v": 2, "state": "hit"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 11, "narration": "New best streak: 4 (1 \u2192 2 \u2192 3 \u2192 4). The remaining numbers (3, 2) fail the 'num - 1 not in set' check and are skipped.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "hit"}, {"v": 200, "state": "done"}, {"v": 1, "state": "hit"}, {"v": 3, "state": "hit"}, {"v": 2, "state": "hit"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}, {"line": 13, "narration": "<b>Return 4</b> \u2014 the longest run is 1 \u2192 2 \u2192 3 \u2192 4.", "rows": [{"label": "nums", "items": [{"v": 100, "state": "done"}, {"v": 4, "state": "hit"}, {"v": 200, "state": "done"}, {"v": 1, "state": "hit"}, {"v": 3, "state": "hit"}, {"v": 2, "state": "hit"}]}], "map": {"label": "num_set", "items": [{"v": 100}, {"v": 4}, {"v": 200}, {"v": 1}, {"v": 3}, {"v": 2}]}}];</script>
+<script src="../shared/viz.js"></script>
+
+  </div>
+</div>
+<footer class="site-footer"><a href="../index.html">&larr; back to all problems</a></footer>
+</body>
+</html>
